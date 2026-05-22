@@ -5,10 +5,10 @@ import com.lemonappdev.konsist.api.verify.assertTrue
 import org.junit.Test
 
 class ArchitectureTest {
-
     @Test
     fun `domain layer must not depend on Android framework`() {
-        Konsist.scopeFromProduction()
+        Konsist
+            .scopeFromProduction()
             .files
             .filter { it.packagee?.name?.contains(".domain") == true }
             .assertTrue { file ->
@@ -22,7 +22,8 @@ class ArchitectureTest {
 
     @Test
     fun `domain layer must not depend on Retrofit or Room`() {
-        Konsist.scopeFromProduction()
+        Konsist
+            .scopeFromProduction()
             .files
             .filter { it.packagee?.name?.contains(".domain") == true }
             .assertTrue { file ->
@@ -36,16 +37,18 @@ class ArchitectureTest {
 
     @Test
     fun `feature module must not depend on another feature module`() {
-        Konsist.scopeFromProduction()
+        Konsist
+            .scopeFromProduction()
             .files
             .filter { it.packagee?.name?.startsWith("tech.sabitani.feature.") == true }
             .assertTrue { file ->
-                val ownFeaturePackage = file.packagee
-                    ?.name
-                    ?.split('.')
-                    ?.take(4)
-                    ?.joinToString(".")
-                    .orEmpty()
+                val ownFeaturePackage =
+                    file.packagee
+                        ?.name
+                        ?.split('.')
+                        ?.take(4)
+                        ?.joinToString(".")
+                        .orEmpty()
                 file.imports.none { import ->
                     import.name.startsWith("tech.sabitani.feature.") &&
                         !import.name.startsWith(ownFeaturePackage)

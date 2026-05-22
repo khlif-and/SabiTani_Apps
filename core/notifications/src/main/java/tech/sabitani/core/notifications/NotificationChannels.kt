@@ -12,13 +12,14 @@ object NotificationChannels {
 
     fun ensureChannels(context: Context) {
         val manager = context.getSystemService<NotificationManager>() ?: return
-        val general = NotificationChannel(
-            GENERAL_ID,
-            GENERAL_NAME,
-            NotificationManager.IMPORTANCE_DEFAULT,
-        ).apply {
-            description = GENERAL_DESCRIPTION
-        }
+        val general =
+            NotificationChannel(
+                GENERAL_ID,
+                GENERAL_NAME,
+                NotificationManager.IMPORTANCE_DEFAULT,
+            ).apply {
+                description = GENERAL_DESCRIPTION
+            }
         manager.createNotificationChannel(general)
     }
 }

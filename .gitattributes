@@ -1,0 +1,20 @@
+# Normalize text files to LF in git, regardless of contributor OS.
+# Spotless reads .gitattributes to pick the canonical line ending.
+
+* text=auto eol=lf
+
+# Windows-only scripts keep CRLF (otherwise cmd.exe chokes).
+*.bat text eol=crlf
+*.cmd text eol=crlf
+
+# Binary files — never normalize.
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.webp binary
+*.jar binary
+*.keystore binary
+*.apk binary
+*.aab binary
