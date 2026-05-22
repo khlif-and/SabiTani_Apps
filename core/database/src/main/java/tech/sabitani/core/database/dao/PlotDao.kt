@@ -16,6 +16,9 @@ interface PlotDao {
     @Query("SELECT * FROM plots WHERE id = :id LIMIT 1")
     fun observeById(id: Long): Flow<PlotEntity?>
 
+    @Query("SELECT COUNT(*) FROM plots")
+    fun observeTotalCount(): Flow<Int>
+
     @Insert(onConflict = OnConflictStrategy.ABORT)
     suspend fun insert(entity: PlotEntity): Long
 

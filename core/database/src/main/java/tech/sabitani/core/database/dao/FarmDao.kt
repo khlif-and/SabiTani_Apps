@@ -16,6 +16,9 @@ interface FarmDao {
     @Query("SELECT * FROM farms WHERE id = :id LIMIT 1")
     fun observeById(id: Long): Flow<FarmEntity?>
 
+    @Query("SELECT COUNT(*) FROM farms")
+    fun observeCount(): Flow<Int>
+
     @Insert(onConflict = OnConflictStrategy.ABORT)
     suspend fun insert(entity: FarmEntity): Long
 

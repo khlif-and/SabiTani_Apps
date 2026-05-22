@@ -8,6 +8,7 @@ import androidx.room.Update
 import kotlinx.coroutines.flow.Flow
 import tech.sabitani.core.database.entity.TransactionEntity
 import tech.sabitani.core.database.projection.CycleTransactionTotals
+import tech.sabitani.core.database.projection.TransactionRangeTotals
 
 @Dao
 interface TransactionDao {
@@ -26,6 +27,20 @@ interface TransactionDao {
         """,
     )
     fun observeTotalsByCycle(cycleId: Long): Flow<CycleTransactionTotals>
+
+    @Query(
+        """
+        SELECT
+            COALESCE(SUM(CASE WHEN type = 'INCOME' THEN amountIdr ELSE 0 END), 0) AS totalIncomeIdr,
+            COALESCE(SUM(CASE WHEN type = 'EXPENSE' THEN amountIdr ELSE 0 END), 0) AS totalExpenseIdr
+        FROM transactions
+        WHERE occurredOnIso >= :startIso AND occurredOnIso <= :endIso
+        """,
+    )
+    fun observeTotalsForRange(
+        startIso: String,
+        endIso: String,
+    ): Flow<TransactionRangeTotals>
 
     @Insert(onConflict = OnConflictStrategy.ABORT)
     suspend fun insert(entity: TransactionEntity): Long
