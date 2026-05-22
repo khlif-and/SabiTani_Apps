@@ -34,6 +34,10 @@ chucker = "4.0.0"
 room = "2.6.1"
 datastore = "1.1.1"
 securityCrypto = "1.1.0-alpha06"
+sqlcipher = "4.6.1"
+
+# ── Security ─────────────────────────────────────────────────────────────────
+biometric = "1.2.0-alpha05"
 
 # ── Media ────────────────────────────────────────────────────────────────────
 coil = "3.0.4"
@@ -124,6 +128,9 @@ androidx-room-testing = { group = "androidx.room", name = "room-testing", versio
 androidx-datastore-preferences = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "datastore" }
 androidx-datastore-proto = { group = "androidx.datastore", name = "datastore", version.ref = "datastore" }
 androidx-security-crypto = { group = "androidx.security", name = "security-crypto", version.ref = "securityCrypto" }
+sqlcipher-android = { group = "net.zetetic", name = "sqlcipher-android", version.ref = "sqlcipher" }
+androidx-sqlite = { group = "androidx.sqlite", name = "sqlite", version = "2.4.0" }
+androidx-biometric = { group = "androidx.biometric", name = "biometric-ktx", version.ref = "biometric" }
 
 # ── Coil 3 ───────────────────────────────────────────────────────────────────
 coil-compose = { group = "io.coil-kt.coil3", name = "coil-compose", version.ref = "coil" }

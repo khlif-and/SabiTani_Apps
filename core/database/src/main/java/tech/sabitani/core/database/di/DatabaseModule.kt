@@ -7,13 +7,16 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.runBlocking
 import kotlinx.datetime.Clock
+import net.zetetic.database.sqlcipher.SupportOpenHelperFactory
 import tech.sabitani.core.database.SabiTaniDatabase
 import tech.sabitani.core.database.dao.CropCycleDao
 import tech.sabitani.core.database.dao.FarmActivityDao
 import tech.sabitani.core.database.dao.FarmDao
 import tech.sabitani.core.database.dao.PlotDao
 import tech.sabitani.core.database.dao.TransactionDao
+import tech.sabitani.core.security.database.DatabaseKeyProvider
 import javax.inject.Singleton
 
 private const val DATABASE_NAME = "sabitani.db"
@@ -25,13 +28,19 @@ internal object DatabaseModule {
     @Singleton
     fun providesSabiTaniDatabase(
         @ApplicationContext context: Context,
-    ): SabiTaniDatabase =
-        Room
+        keyProvider: DatabaseKeyProvider,
+    ): SabiTaniDatabase {
+        System.loadLibrary("sqlcipher")
+        val passphrase = runBlocking { keyProvider.getPassphrase() }
+        val factory = SupportOpenHelperFactory(passphrase)
+        return Room
             .databaseBuilder(
                 context = context,
                 klass = SabiTaniDatabase::class.java,
                 name = DATABASE_NAME,
-            ).build()
+            ).openHelperFactory(factory)
+            .build()
+    }
 
     @Provides
     fun providesFarmDao(database: SabiTaniDatabase): FarmDao = database.farmDao()
