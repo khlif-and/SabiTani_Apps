@@ -1,0 +1,20 @@
+build:
+  maxIssues: 100
+  excludeCorrectable: false
+
+style:
+  MagicNumber:
+    ignorePropertyDeclaration: true
+    ignoreCompanionObjectPropertyDeclaration: true
+    ignoreAnnotation: true
+
+complexity:
+  LongMethod:
+    threshold: 80
+  LongParameterList:
+    functionThreshold: 8
+    constructorThreshold: 10
+
+naming:
+  FunctionNaming:
+    ignoreAnnotated: ['Composable']
