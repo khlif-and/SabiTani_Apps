@@ -1,26 +1,34 @@
 package tech.sabitani.core.security.di
 
-import android.content.Context
+import dagger.Binds
 import dagger.Module
-import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import tech.sabitani.core.security.biometric.BiometricAuthenticator
+import tech.sabitani.core.security.biometric.DefaultBiometricAuthenticator
 import tech.sabitani.core.security.database.DatabaseKeyProvider
-import tech.sabitani.core.security.database.DefaultDatabaseKeyProvider
-import tech.sabitani.core.security.keystore.EncryptedKeyStorage
-import javax.inject.Singleton
+import tech.sabitani.core.security.database.PinAwareDatabaseKeyHolder
+import tech.sabitani.core.security.database.PinAwareDatabaseKeyProvider
+import tech.sabitani.core.security.lock.DefaultLockSettingsRepository
+import tech.sabitani.core.security.lock.LockSettingsRepository
+import tech.sabitani.core.security.pin.DefaultPinManager
+import tech.sabitani.core.security.pin.PinManager
 
 @Module
 @InstallIn(SingletonComponent::class)
-internal object SecurityModule {
-    @Provides
-    @Singleton
-    fun providesEncryptedKeyStorage(
-        @ApplicationContext context: Context,
-    ): EncryptedKeyStorage = EncryptedKeyStorage(context)
+internal abstract class SecurityModule {
+    @Binds
+    abstract fun bindsDatabaseKeyProvider(impl: PinAwareDatabaseKeyProvider): DatabaseKeyProvider
 
-    @Provides
-    @Singleton
-    fun providesDatabaseKeyProvider(storage: EncryptedKeyStorage): DatabaseKeyProvider = DefaultDatabaseKeyProvider(storage)
+    @Binds
+    abstract fun bindsPinAwareDatabaseKeyHolder(impl: PinAwareDatabaseKeyProvider): PinAwareDatabaseKeyHolder
+
+    @Binds
+    abstract fun bindsPinManager(impl: DefaultPinManager): PinManager
+
+    @Binds
+    abstract fun bindsBiometricAuthenticator(impl: DefaultBiometricAuthenticator): BiometricAuthenticator
+
+    @Binds
+    abstract fun bindsLockSettingsRepository(impl: DefaultLockSettingsRepository): LockSettingsRepository
 }

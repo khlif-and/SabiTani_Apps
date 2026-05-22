@@ -4,9 +4,13 @@ androidx.activity:activity:1.12.2
 androidx.annotation:annotation-experimental:1.4.1
 androidx.annotation:annotation-jvm:1.9.1
 androidx.annotation:annotation:1.9.1
+androidx.appcompat:appcompat-resources:1.2.0
+androidx.appcompat:appcompat:1.2.0
 androidx.arch.core:core-common:2.2.0
 androidx.arch.core:core-runtime:2.2.0
 androidx.autofill:autofill:1.0.0
+androidx.biometric:biometric-ktx:1.2.0-alpha05
+androidx.biometric:biometric:1.2.0-alpha05
 androidx.collection:collection-jvm:1.5.0
 androidx.collection:collection-ktx:1.5.0
 androidx.collection:collection:1.5.0
@@ -51,6 +55,7 @@ androidx.concurrent:concurrent-futures:1.1.0
 androidx.core:core-ktx:1.17.0
 androidx.core:core-viewtree:1.0.0
 androidx.core:core:1.17.0
+androidx.cursoradapter:cursoradapter:1.0.0
 androidx.customview:customview-poolingcontainer:1.0.0
 androidx.customview:customview:1.0.0
 androidx.datastore:datastore-android:1.1.1
@@ -63,6 +68,7 @@ androidx.datastore:datastore-preferences-core-jvm:1.1.1
 androidx.datastore:datastore-preferences-core:1.1.1
 androidx.datastore:datastore-preferences:1.1.1
 androidx.datastore:datastore:1.1.1
+androidx.drawerlayout:drawerlayout:1.0.0
 androidx.emoji2:emoji2:1.4.0
 androidx.fragment:fragment:1.5.1
 androidx.graphics:graphics-path:1.0.1
@@ -114,6 +120,8 @@ androidx.sqlite:sqlite:2.4.0
 androidx.startup:startup-runtime:1.1.1
 androidx.test.espresso:espresso-idling-resource:3.5.1
 androidx.tracing:tracing:1.2.0
+androidx.vectordrawable:vectordrawable-animated:1.1.0
+androidx.vectordrawable:vectordrawable:1.1.0
 androidx.versionedparcelable:versionedparcelable:1.1.1
 androidx.viewpager:viewpager:1.0.0
 com.github.chuckerteam.chucker:library-no-op:4.0.0
