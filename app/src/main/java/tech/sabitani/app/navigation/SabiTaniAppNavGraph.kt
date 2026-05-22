@@ -8,6 +8,8 @@ import androidx.navigation.navOptions
 import tech.sabitani.core.navigation.SabiTaniNavHost
 import tech.sabitani.feature.auth.presentation.screen.LoginRoute
 import tech.sabitani.feature.auth.presentation.screen.loginScreen
+import tech.sabitani.feature.lock.presentation.screen.UnlockRoute
+import tech.sabitani.feature.lock.presentation.screen.unlockScreen
 import tech.sabitani.feature.onboarding.presentation.screen.OnboardingRoute
 import tech.sabitani.feature.onboarding.presentation.screen.onboardingScreen
 import tech.sabitani.feature.splash.presentation.screen.SplashRoute
@@ -45,6 +47,14 @@ fun SabiTaniAppNavGraph(
                 navController.navigate(
                     route = MainShellRoute,
                     navOptions = navOptions { popUpTo(LoginRoute) { inclusive = true } },
+                )
+            },
+        )
+        unlockScreen(
+            onUnlocked = {
+                navController.navigate(
+                    route = MainShellRoute,
+                    navOptions = navOptions { popUpTo(UnlockRoute) { inclusive = true } },
                 )
             },
         )

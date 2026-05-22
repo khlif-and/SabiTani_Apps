@@ -43,7 +43,9 @@ dependencies {
     implementation(projects.feature.home)
     implementation(projects.feature.plot)
     implementation(projects.feature.cycle)
+    implementation(projects.feature.lock)
     implementation(projects.core.model)
+    implementation(projects.core.security)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)

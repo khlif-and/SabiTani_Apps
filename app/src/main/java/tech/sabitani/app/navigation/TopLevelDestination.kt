@@ -11,6 +11,8 @@ import androidx.navigation.NavDestination.Companion.hasRoute
 import tech.sabitani.feature.cycle.presentation.screen.CycleDetailRoute
 import tech.sabitani.feature.cycle.presentation.screen.CycleFormRoute
 import tech.sabitani.feature.home.presentation.screen.HomeRoute
+import tech.sabitani.feature.lock.presentation.screen.SecuritySettingsRoute
+import tech.sabitani.feature.lock.presentation.screen.SetupPinRoute
 import tech.sabitani.feature.plot.presentation.screen.FarmListRoute
 import tech.sabitani.feature.plot.presentation.screen.PlotDetailRoute
 import tech.sabitani.feature.plot.presentation.screen.PlotListRoute
@@ -36,7 +38,10 @@ internal enum class TopLevelDestination(
                     destination.hasRoute<CycleFormRoute>() ||
                     destination.hasRoute<CycleDetailRoute>()
             TANIA -> destination.hasRoute<TaniaPlaceholderRoute>()
-            PROFIL -> destination.hasRoute<ProfilePlaceholderRoute>()
+            PROFIL ->
+                destination.hasRoute<ProfileRoute>() ||
+                    destination.hasRoute<SecuritySettingsRoute>() ||
+                    destination.hasRoute<SetupPinRoute>()
         }
     }
 }
