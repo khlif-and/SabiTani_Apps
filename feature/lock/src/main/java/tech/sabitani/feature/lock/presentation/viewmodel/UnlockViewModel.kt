@@ -8,12 +8,12 @@ import org.orbitmvi.orbit.viewmodel.container
 import tech.sabitani.core.security.biometric.BiometricPromptText
 import tech.sabitani.core.security.pin.VerifyPinResult
 import tech.sabitani.feature.lock.domain.usecase.ObserveLockStatusUseCase
-import tech.sabitani.feature.lock.domain.usecase.UnlockBiometricResult
-import tech.sabitani.feature.lock.domain.usecase.UnlockWithBiometricUseCase
 import tech.sabitani.feature.lock.domain.usecase.VerifyPinUseCase
 import tech.sabitani.feature.lock.presentation.state.UnlockEffect
 import tech.sabitani.feature.lock.presentation.state.UnlockIntent
 import tech.sabitani.feature.lock.presentation.state.UnlockState
+import tech.sabitani.feature.lock.presentation.usecase.UnlockBiometricResult
+import tech.sabitani.feature.lock.presentation.usecase.UnlockWithBiometricUseCase
 import javax.inject.Inject
 
 private const val MAX_PIN_LENGTH = 8

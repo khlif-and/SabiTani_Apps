@@ -1,4 +1,4 @@
-package tech.sabitani.feature.lock.domain.usecase
+package tech.sabitani.feature.lock.presentation.usecase
 
 import androidx.biometric.BiometricPrompt
 import androidx.fragment.app.FragmentActivity

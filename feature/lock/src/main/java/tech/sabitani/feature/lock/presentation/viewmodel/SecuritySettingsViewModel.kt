@@ -8,12 +8,12 @@ import org.orbitmvi.orbit.viewmodel.container
 import tech.sabitani.core.security.biometric.BiometricPromptText
 import tech.sabitani.feature.lock.domain.usecase.DisableBiometricUseCase
 import tech.sabitani.feature.lock.domain.usecase.DisablePinUseCase
-import tech.sabitani.feature.lock.domain.usecase.EnableBiometricResult
-import tech.sabitani.feature.lock.domain.usecase.EnableBiometricUseCase
 import tech.sabitani.feature.lock.domain.usecase.ObserveLockStatusUseCase
 import tech.sabitani.feature.lock.presentation.state.SecuritySettingsEffect
 import tech.sabitani.feature.lock.presentation.state.SecuritySettingsIntent
 import tech.sabitani.feature.lock.presentation.state.SecuritySettingsState
+import tech.sabitani.feature.lock.presentation.usecase.EnableBiometricResult
+import tech.sabitani.feature.lock.presentation.usecase.EnableBiometricUseCase
 import javax.inject.Inject
 
 @HiltViewModel
