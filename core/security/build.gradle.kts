@@ -9,4 +9,6 @@ android {
 
 dependencies {
     implementation(libs.androidx.security.crypto)
+    api(libs.androidx.biometric)
+    implementation(libs.kotlinx.coroutines.core)
 }

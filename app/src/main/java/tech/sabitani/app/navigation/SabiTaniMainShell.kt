@@ -23,6 +23,10 @@ import tech.sabitani.feature.cycle.presentation.screen.cycleDetailScreen
 import tech.sabitani.feature.cycle.presentation.screen.cycleFormScreen
 import tech.sabitani.feature.home.presentation.screen.HomeRoute
 import tech.sabitani.feature.home.presentation.screen.homeScreen
+import tech.sabitani.feature.lock.presentation.screen.SecuritySettingsRoute
+import tech.sabitani.feature.lock.presentation.screen.SetupPinRoute
+import tech.sabitani.feature.lock.presentation.screen.securitySettingsScreen
+import tech.sabitani.feature.lock.presentation.screen.setupPinScreen
 import tech.sabitani.feature.plot.presentation.screen.FarmListRoute
 import tech.sabitani.feature.plot.presentation.screen.PlotDetailRoute
 import tech.sabitani.feature.plot.presentation.screen.PlotListRoute
@@ -83,7 +87,17 @@ internal fun SabiTaniMainShell(modifier: Modifier = Modifier) {
             )
             cycleDetailScreen(onBack = { mainNavController.popBackStack() })
             taniaPlaceholderScreen()
-            profilePlaceholderScreen()
+            profileScreen(
+                onOpenSecurity = { mainNavController.navigate(SecuritySettingsRoute) },
+            )
+            securitySettingsScreen(
+                onBack = { mainNavController.popBackStack() },
+                onNavigateToSetupPin = { mainNavController.navigate(SetupPinRoute) },
+            )
+            setupPinScreen(
+                onBack = { mainNavController.popBackStack() },
+                onPinConfigured = { mainNavController.popBackStack() },
+            )
         }
     }
 }
@@ -119,7 +133,7 @@ private fun NavHostController.navigateToTopLevel(destination: TopLevelDestinatio
             TopLevelDestination.HOME -> HomeRoute
             TopLevelDestination.KEBUN -> FarmListRoute
             TopLevelDestination.TANIA -> TaniaPlaceholderRoute
-            TopLevelDestination.PROFIL -> ProfilePlaceholderRoute
+            TopLevelDestination.PROFIL -> ProfileRoute
         }
     navigate(route = route, navOptions = topLevelOptions)
 }
