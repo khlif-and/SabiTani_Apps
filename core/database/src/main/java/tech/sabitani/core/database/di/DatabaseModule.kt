@@ -8,6 +8,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
+import kotlinx.datetime.Clock
 import tech.sabitani.core.database.SabiTaniDatabase
 import tech.sabitani.core.database.dao.CropCycleDao
 import tech.sabitani.core.database.dao.FarmActivityDao
@@ -46,4 +47,8 @@ internal object DatabaseModule {
 
     @Provides
     fun providesTransactionDao(database: SabiTaniDatabase): TransactionDao = database.transactionDao()
+
+    @Provides
+    @Singleton
+    fun providesClock(): Clock = Clock.System
 }
