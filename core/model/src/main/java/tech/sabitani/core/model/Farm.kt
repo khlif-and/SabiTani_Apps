@@ -10,7 +10,9 @@ data class Farm(
     val createdAt: Instant,
 )
 
-enum class SoilType(val displayName: String) {
+enum class SoilType(
+    val displayName: String,
+) {
     CLAY("Liat"),
     LOAM("Lempung"),
     SANDY("Pasir"),
@@ -18,7 +20,9 @@ enum class SoilType(val displayName: String) {
     OTHER("Lainnya"),
 }
 
-enum class IrrigationType(val displayName: String) {
+enum class IrrigationType(
+    val displayName: String,
+) {
     RAIN_FED("Tadah Hujan"),
     SURFACE("Irigasi Permukaan"),
     DRIP("Tetes"),

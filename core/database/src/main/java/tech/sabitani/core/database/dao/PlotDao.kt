@@ -10,7 +10,6 @@ import tech.sabitani.core.database.entity.PlotEntity
 
 @Dao
 interface PlotDao {
-
     @Query("SELECT * FROM plots WHERE farmId = :farmId ORDER BY createdAtEpochMillis DESC")
     fun observeByFarm(farmId: Long): Flow<List<PlotEntity>>
 

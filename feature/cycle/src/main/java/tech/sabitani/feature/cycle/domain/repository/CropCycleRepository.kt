@@ -6,7 +6,6 @@ import tech.sabitani.core.model.CropCycle
 import tech.sabitani.core.model.CycleStatus
 
 interface CropCycleRepository {
-
     fun observeCyclesByPlot(plotId: Long): Flow<List<CropCycle>>
 
     fun observeCycle(id: Long): Flow<CropCycle?>
@@ -20,5 +19,9 @@ interface CropCycleRepository {
         notes: String?,
     ): Long
 
-    suspend fun updateStatus(id: Long, status: CycleStatus, actualHarvestDate: LocalDate?)
+    suspend fun updateStatus(
+        id: Long,
+        status: CycleStatus,
+        actualHarvestDate: LocalDate?,
+    )
 }

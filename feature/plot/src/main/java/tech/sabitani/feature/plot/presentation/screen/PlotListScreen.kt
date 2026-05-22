@@ -104,12 +104,13 @@ private fun PlotList(
 ) {
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
-        contentPadding = PaddingValues(
-            top = contentPadding.calculateTopPadding() + 12.dp,
-            bottom = contentPadding.calculateBottomPadding() + 88.dp,
-            start = 16.dp,
-            end = 16.dp,
-        ),
+        contentPadding =
+            PaddingValues(
+                top = contentPadding.calculateTopPadding() + 12.dp,
+                bottom = contentPadding.calculateBottomPadding() + 88.dp,
+                start = 16.dp,
+                end = 16.dp,
+            ),
         verticalArrangement = Arrangement.spacedBy(12.dp),
     ) {
         items(items = plots, key = Plot::id) { plot ->
@@ -120,8 +121,9 @@ private fun PlotList(
                 ) {
                     Text(plot.name, style = MaterialTheme.typography.titleMedium)
                     val area = "%,.0f".format(plot.areaSqM)
-                    val subtitle = "$area m² · ${plot.soilType.displayName} · " +
-                        plot.irrigationType.displayName
+                    val subtitle =
+                        "$area m² · ${plot.soilType.displayName} · " +
+                            plot.irrigationType.displayName
                     Text(
                         text = subtitle,
                         style = MaterialTheme.typography.bodyMedium,

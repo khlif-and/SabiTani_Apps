@@ -6,17 +6,19 @@ import tech.sabitani.core.model.IrrigationType
 import tech.sabitani.core.model.Plot
 import tech.sabitani.core.model.SoilType
 
-internal fun PlotEntity.toDomain(): Plot = Plot(
-    id = id,
-    farmId = farmId,
-    name = name,
-    areaSqM = areaSqM,
-    soilType = runCatching { SoilType.valueOf(soilType) }.getOrDefault(SoilType.OTHER),
-    irrigationType = runCatching { IrrigationType.valueOf(irrigationType) }
-        .getOrDefault(IrrigationType.OTHER),
-    notes = notes,
-    createdAt = Instant.fromEpochMilliseconds(createdAtEpochMillis),
-)
+internal fun PlotEntity.toDomain(): Plot =
+    Plot(
+        id = id,
+        farmId = farmId,
+        name = name,
+        areaSqM = areaSqM,
+        soilType = runCatching { SoilType.valueOf(soilType) }.getOrDefault(SoilType.OTHER),
+        irrigationType =
+            runCatching { IrrigationType.valueOf(irrigationType) }
+                .getOrDefault(IrrigationType.OTHER),
+        notes = notes,
+        createdAt = Instant.fromEpochMilliseconds(createdAtEpochMillis),
+    )
 
 internal fun newPlotEntity(
     farmId: Long,
@@ -26,12 +28,13 @@ internal fun newPlotEntity(
     irrigationType: IrrigationType,
     notes: String?,
     createdAt: Instant,
-): PlotEntity = PlotEntity(
-    farmId = farmId,
-    name = name,
-    areaSqM = areaSqM,
-    soilType = soilType.name,
-    irrigationType = irrigationType.name,
-    notes = notes,
-    createdAtEpochMillis = createdAt.toEpochMilliseconds(),
-)
+): PlotEntity =
+    PlotEntity(
+        farmId = farmId,
+        name = name,
+        areaSqM = areaSqM,
+        soilType = soilType.name,
+        irrigationType = irrigationType.name,
+        notes = notes,
+        createdAtEpochMillis = createdAt.toEpochMilliseconds(),
+    )

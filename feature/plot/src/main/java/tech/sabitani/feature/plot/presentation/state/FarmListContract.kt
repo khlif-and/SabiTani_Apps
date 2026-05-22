@@ -14,15 +14,35 @@ data class FarmListState(
 
 sealed interface FarmListIntent {
     data object OpenAddDialog : FarmListIntent
+
     data object DismissAddDialog : FarmListIntent
-    data class NameChanged(val value: String) : FarmListIntent
-    data class LocationChanged(val value: String) : FarmListIntent
-    data class TotalAreaChanged(val value: String) : FarmListIntent
+
+    data class NameChanged(
+        val value: String,
+    ) : FarmListIntent
+
+    data class LocationChanged(
+        val value: String,
+    ) : FarmListIntent
+
+    data class TotalAreaChanged(
+        val value: String,
+    ) : FarmListIntent
+
     data object SubmitAddFarm : FarmListIntent
-    data class FarmClicked(val farmId: Long) : FarmListIntent
+
+    data class FarmClicked(
+        val farmId: Long,
+    ) : FarmListIntent
 }
 
 sealed interface FarmListEffect {
-    data class ShowError(val message: String) : FarmListEffect
-    data class NavigateToPlotList(val farmId: Long, val farmName: String) : FarmListEffect
+    data class ShowError(
+        val message: String,
+    ) : FarmListEffect
+
+    data class NavigateToPlotList(
+        val farmId: Long,
+        val farmName: String,
+    ) : FarmListEffect
 }

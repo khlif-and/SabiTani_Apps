@@ -10,7 +10,6 @@ import tech.sabitani.core.database.entity.FarmEntity
 
 @Dao
 interface FarmDao {
-
     @Query("SELECT * FROM farms ORDER BY createdAtEpochMillis DESC")
     fun observeAll(): Flow<List<FarmEntity>>
 

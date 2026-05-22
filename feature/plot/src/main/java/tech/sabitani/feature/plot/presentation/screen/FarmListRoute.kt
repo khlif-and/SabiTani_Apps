@@ -6,7 +6,12 @@ import kotlinx.serialization.Serializable
 data object FarmListRoute
 
 @Serializable
-data class PlotListRoute(val farmId: Long, val farmName: String)
+data class PlotListRoute(
+    val farmId: Long,
+    val farmName: String,
+)
 
 @Serializable
-data class PlotDetailRoute(val plotId: Long)
+data class PlotDetailRoute(
+    val plotId: Long,
+)

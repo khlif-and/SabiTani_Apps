@@ -14,7 +14,9 @@ data class FarmActivity(
     val createdAt: Instant,
 )
 
-enum class ActivityType(val displayName: String) {
+enum class ActivityType(
+    val displayName: String,
+) {
     PLANTING("Tanam"),
     FERTILIZING("Pemupukan"),
     PESTICIDE("Pestisida"),

@@ -10,7 +10,6 @@ import tech.sabitani.core.database.entity.CropCycleEntity
 
 @Dao
 interface CropCycleDao {
-
     @Query("SELECT * FROM crop_cycles WHERE plotId = :plotId ORDER BY startDateIso DESC")
     fun observeByPlot(plotId: Long): Flow<List<CropCycleEntity>>
 

@@ -7,7 +7,6 @@ import tech.sabitani.core.model.Transaction
 import tech.sabitani.core.model.TransactionCategory
 
 interface TransactionRepository {
-
     fun observeTransactions(cycleId: Long): Flow<List<Transaction>>
 
     fun observeCostSummary(cycleId: Long): Flow<CycleCostSummary>

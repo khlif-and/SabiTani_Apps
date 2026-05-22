@@ -5,7 +5,6 @@ import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
 
 internal class DateConverters {
-
     @TypeConverter
     fun instantToEpochMillis(value: Instant?): Long? = value?.toEpochMilliseconds()
 

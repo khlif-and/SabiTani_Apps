@@ -30,8 +30,9 @@ internal fun CycleSummaryCard(
                 Text("Varietas: $it", style = MaterialTheme.typography.bodyMedium)
             }
             Text(
-                text = "Tanam: ${cycle.startDate}" +
-                    (cycle.targetHarvestDate?.let { " · Target panen: $it" } ?: ""),
+                text =
+                    "Tanam: ${cycle.startDate}" +
+                        (cycle.targetHarvestDate?.let { " · Target panen: $it" } ?: ""),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
@@ -47,9 +48,10 @@ internal fun CycleSummaryCard(
 @Composable
 private fun CostSummaryRow(summary: CycleCostSummary) {
     Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(top = 8.dp),
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .padding(top = 8.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
     ) {
         SummaryCell(label = "Pemasukan", amount = summary.totalIncomeIdr)
@@ -63,7 +65,11 @@ private fun CostSummaryRow(summary: CycleCostSummary) {
 }
 
 @Composable
-private fun SummaryCell(label: String, amount: Long, isProfit: Boolean = true) {
+private fun SummaryCell(
+    label: String,
+    amount: Long,
+    isProfit: Boolean = true,
+) {
     Column {
         Text(label, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
         Text(

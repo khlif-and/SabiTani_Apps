@@ -38,8 +38,9 @@ internal fun ActivityTimeline(
                         "${activity.performedOn} · ${activity.type.displayName}",
                         style = MaterialTheme.typography.titleSmall,
                     )
-                    val material = listOfNotNull(activity.material, activity.dosage)
-                        .joinToString(" · ")
+                    val material =
+                        listOfNotNull(activity.material, activity.dosage)
+                            .joinToString(" · ")
                     if (material.isNotBlank()) {
                         Text(
                             material,

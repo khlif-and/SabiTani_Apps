@@ -40,30 +40,65 @@ data class CycleDetailState(
 )
 
 sealed interface CycleDetailIntent {
-    data class TabSelected(val tab: CycleDetailTab) : CycleDetailIntent
+    data class TabSelected(
+        val tab: CycleDetailTab,
+    ) : CycleDetailIntent
 }
 
 sealed interface ActivityIntent : CycleDetailIntent {
     data object OpenActivityDialog : ActivityIntent
+
     data object DismissActivityDialog : ActivityIntent
-    data class ActivityTypeChanged(val value: ActivityType) : ActivityIntent
-    data class ActivityDateChanged(val value: LocalDate) : ActivityIntent
-    data class ActivityMaterialChanged(val value: String) : ActivityIntent
-    data class ActivityDosageChanged(val value: String) : ActivityIntent
-    data class ActivityNotesChanged(val value: String) : ActivityIntent
+
+    data class ActivityTypeChanged(
+        val value: ActivityType,
+    ) : ActivityIntent
+
+    data class ActivityDateChanged(
+        val value: LocalDate,
+    ) : ActivityIntent
+
+    data class ActivityMaterialChanged(
+        val value: String,
+    ) : ActivityIntent
+
+    data class ActivityDosageChanged(
+        val value: String,
+    ) : ActivityIntent
+
+    data class ActivityNotesChanged(
+        val value: String,
+    ) : ActivityIntent
+
     data object SubmitActivity : ActivityIntent
 }
 
 sealed interface TransactionIntent : CycleDetailIntent {
     data object OpenTransactionDialog : TransactionIntent
+
     data object DismissTransactionDialog : TransactionIntent
-    data class TransactionCategoryChanged(val value: TransactionCategory) : TransactionIntent
-    data class TransactionAmountChanged(val value: String) : TransactionIntent
-    data class TransactionDateChanged(val value: LocalDate) : TransactionIntent
-    data class TransactionNotesChanged(val value: String) : TransactionIntent
+
+    data class TransactionCategoryChanged(
+        val value: TransactionCategory,
+    ) : TransactionIntent
+
+    data class TransactionAmountChanged(
+        val value: String,
+    ) : TransactionIntent
+
+    data class TransactionDateChanged(
+        val value: LocalDate,
+    ) : TransactionIntent
+
+    data class TransactionNotesChanged(
+        val value: String,
+    ) : TransactionIntent
+
     data object SubmitTransaction : TransactionIntent
 }
 
 sealed interface CycleDetailEffect {
-    data class ShowError(val message: String) : CycleDetailEffect
+    data class ShowError(
+        val message: String,
+    ) : CycleDetailEffect
 }

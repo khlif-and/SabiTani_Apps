@@ -45,18 +45,20 @@ internal fun DatePickerField(
             modifier = Modifier.fillMaxWidth(),
         )
         Box(
-            modifier = Modifier
-                .matchParentSize()
-                .clickable(
-                    interactionSource = remember { MutableInteractionSource() },
-                    indication = null,
-                ) { open = true },
+            modifier =
+                Modifier
+                    .matchParentSize()
+                    .clickable(
+                        interactionSource = remember { MutableInteractionSource() },
+                        indication = null,
+                    ) { open = true },
         )
     }
     if (open) {
-        val state = rememberDatePickerState(
-            initialSelectedDateMillis = value?.toUtcStartOfDayMillis(),
-        )
+        val state =
+            rememberDatePickerState(
+                initialSelectedDateMillis = value?.toUtcStartOfDayMillis(),
+            )
         DatePickerDialog(
             onDismissRequest = { open = false },
             confirmButton = {
@@ -84,7 +86,6 @@ internal fun DatePickerField(
     }
 }
 
-private fun LocalDate.toUtcStartOfDayMillis(): Long =
-    LocalDateTime(this, LocalTime(0, 0)).toInstant(TimeZone.UTC).toEpochMilliseconds()
+private fun LocalDate.toUtcStartOfDayMillis(): Long = LocalDateTime(this, LocalTime(0, 0)).toInstant(TimeZone.UTC).toEpochMilliseconds()
 
 private fun Instant.toUtcLocalDate(): LocalDate = toLocalDateTime(TimeZone.UTC).date

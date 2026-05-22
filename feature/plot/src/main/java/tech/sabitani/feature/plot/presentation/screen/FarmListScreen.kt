@@ -91,12 +91,13 @@ private fun FarmList(
 ) {
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
-        contentPadding = PaddingValues(
-            top = contentPadding.calculateTopPadding() + 12.dp,
-            bottom = contentPadding.calculateBottomPadding() + 88.dp,
-            start = 16.dp,
-            end = 16.dp,
-        ),
+        contentPadding =
+            PaddingValues(
+                top = contentPadding.calculateTopPadding() + 12.dp,
+                bottom = contentPadding.calculateBottomPadding() + 88.dp,
+                start = 16.dp,
+                end = 16.dp,
+            ),
         verticalArrangement = Arrangement.spacedBy(12.dp),
     ) {
         items(items = farms, key = Farm::id) { farm ->
@@ -113,9 +114,10 @@ private fun FarmList(
 @Composable
 private fun FarmCardContent(farm: Farm) {
     androidx.compose.foundation.layout.Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp),
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(4.dp),
     ) {
         Text(farm.name, style = MaterialTheme.typography.titleMedium)

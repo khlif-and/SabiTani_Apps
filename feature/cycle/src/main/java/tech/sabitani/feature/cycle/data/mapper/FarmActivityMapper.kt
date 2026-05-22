@@ -6,16 +6,17 @@ import tech.sabitani.core.database.entity.FarmActivityEntity
 import tech.sabitani.core.model.ActivityType
 import tech.sabitani.core.model.FarmActivity
 
-internal fun FarmActivityEntity.toDomain(): FarmActivity = FarmActivity(
-    id = id,
-    cycleId = cycleId,
-    type = runCatching { ActivityType.valueOf(type) }.getOrDefault(ActivityType.OTHER),
-    performedOn = LocalDate.parse(performedOnIso),
-    material = material,
-    dosage = dosage,
-    notes = notes,
-    createdAt = Instant.fromEpochMilliseconds(createdAtEpochMillis),
-)
+internal fun FarmActivityEntity.toDomain(): FarmActivity =
+    FarmActivity(
+        id = id,
+        cycleId = cycleId,
+        type = runCatching { ActivityType.valueOf(type) }.getOrDefault(ActivityType.OTHER),
+        performedOn = LocalDate.parse(performedOnIso),
+        material = material,
+        dosage = dosage,
+        notes = notes,
+        createdAt = Instant.fromEpochMilliseconds(createdAtEpochMillis),
+    )
 
 internal fun newFarmActivityEntity(
     cycleId: Long,
@@ -25,12 +26,13 @@ internal fun newFarmActivityEntity(
     dosage: String?,
     notes: String?,
     createdAt: Instant,
-): FarmActivityEntity = FarmActivityEntity(
-    cycleId = cycleId,
-    type = type.name,
-    performedOnIso = performedOn.toString(),
-    material = material,
-    dosage = dosage,
-    notes = notes,
-    createdAtEpochMillis = createdAt.toEpochMilliseconds(),
-)
+): FarmActivityEntity =
+    FarmActivityEntity(
+        cycleId = cycleId,
+        type = type.name,
+        performedOnIso = performedOn.toString(),
+        material = material,
+        dosage = dosage,
+        notes = notes,
+        createdAtEpochMillis = createdAt.toEpochMilliseconds(),
+    )

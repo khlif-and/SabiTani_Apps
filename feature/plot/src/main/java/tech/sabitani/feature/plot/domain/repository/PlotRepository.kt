@@ -6,7 +6,6 @@ import tech.sabitani.core.model.Plot
 import tech.sabitani.core.model.SoilType
 
 interface PlotRepository {
-
     fun observePlots(farmId: Long): Flow<List<Plot>>
 
     fun observePlot(id: Long): Flow<Plot?>

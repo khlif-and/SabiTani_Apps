@@ -13,5 +13,7 @@ sealed interface PlotDetailIntent {
 }
 
 sealed interface PlotDetailEffect {
-    data class NavigateToStartCycle(val plotId: Long) : PlotDetailEffect
+    data class NavigateToStartCycle(
+        val plotId: Long,
+    ) : PlotDetailEffect
 }

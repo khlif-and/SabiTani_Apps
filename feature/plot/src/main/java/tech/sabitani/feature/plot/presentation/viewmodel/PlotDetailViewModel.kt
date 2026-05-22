@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.orbitmvi.orbit.ContainerHost
@@ -15,28 +14,33 @@ import tech.sabitani.feature.plot.presentation.screen.PlotDetailRoute
 import tech.sabitani.feature.plot.presentation.state.PlotDetailEffect
 import tech.sabitani.feature.plot.presentation.state.PlotDetailIntent
 import tech.sabitani.feature.plot.presentation.state.PlotDetailState
+import javax.inject.Inject
 
 @HiltViewModel
-internal class PlotDetailViewModel @Inject constructor(
-    savedStateHandle: SavedStateHandle,
-    private val observePlotDetailUseCase: ObservePlotDetailUseCase,
-) : ViewModel(), ContainerHost<PlotDetailState, PlotDetailEffect> {
+internal class PlotDetailViewModel
+    @Inject
+    constructor(
+        savedStateHandle: SavedStateHandle,
+        private val observePlotDetailUseCase: ObservePlotDetailUseCase,
+    ) : ViewModel(),
+        ContainerHost<PlotDetailState, PlotDetailEffect> {
+        private val route = savedStateHandle.toRoute<PlotDetailRoute>()
 
-    private val route = savedStateHandle.toRoute<PlotDetailRoute>()
+        override val container =
+            container<PlotDetailState, PlotDetailEffect>(
+                PlotDetailState(plotId = route.plotId),
+            ) {
+                observePlotDetailUseCase(route.plotId)
+                    .onEach { plot -> intent { reduce { state.copy(isLoading = false, plot = plot) } } }
+                    .launchIn(viewModelScope)
+            }
 
-    override val container = container<PlotDetailState, PlotDetailEffect>(
-        PlotDetailState(plotId = route.plotId),
-    ) {
-        observePlotDetailUseCase(route.plotId)
-            .onEach { plot -> intent { reduce { state.copy(isLoading = false, plot = plot) } } }
-            .launchIn(viewModelScope)
-    }
-
-    fun onIntent(intent: PlotDetailIntent) {
-        when (intent) {
-            PlotDetailIntent.StartCycleClicked -> intent {
-                postSideEffect(PlotDetailEffect.NavigateToStartCycle(state.plotId))
+        fun onIntent(intent: PlotDetailIntent) {
+            when (intent) {
+                PlotDetailIntent.StartCycleClicked ->
+                    intent {
+                        postSideEffect(PlotDetailEffect.NavigateToStartCycle(state.plotId))
+                    }
             }
         }
     }
-}

@@ -76,9 +76,10 @@ private fun PlotDetailContent(
     modifier: Modifier = Modifier,
 ) {
     Column(
-        modifier = modifier
-            .fillMaxSize()
-            .padding(16.dp),
+        modifier =
+            modifier
+                .fillMaxSize()
+                .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp),
     ) {
         Card(modifier = Modifier.fillMaxWidth()) {
@@ -107,7 +108,10 @@ private fun PlotDetailContent(
 }
 
 @Composable
-private fun LabeledRow(label: String, value: String) {
+private fun LabeledRow(
+    label: String,
+    value: String,
+) {
     Column {
         Text(label, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
         Text(value, style = MaterialTheme.typography.bodyLarge)

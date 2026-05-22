@@ -6,7 +6,6 @@ import tech.sabitani.core.model.ActivityType
 import tech.sabitani.core.model.FarmActivity
 
 interface FarmActivityRepository {
-
     fun observeActivities(cycleId: Long): Flow<List<FarmActivity>>
 
     suspend fun addActivity(

@@ -14,12 +14,17 @@ data class Transaction(
     val createdAt: Instant,
 )
 
-enum class TransactionType(val displayName: String) {
+enum class TransactionType(
+    val displayName: String,
+) {
     INCOME("Pemasukan"),
     EXPENSE("Pengeluaran"),
 }
 
-enum class TransactionCategory(val displayName: String, val type: TransactionType) {
+enum class TransactionCategory(
+    val displayName: String,
+    val type: TransactionType,
+) {
     SEED("Bibit", TransactionType.EXPENSE),
     FERTILIZER("Pupuk", TransactionType.EXPENSE),
     PESTICIDE("Pestisida", TransactionType.EXPENSE),

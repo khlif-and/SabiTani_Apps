@@ -29,8 +29,12 @@ import tech.sabitani.core.database.entity.TransactionEntity
 @TypeConverters(DateConverters::class)
 abstract class SabiTaniDatabase : RoomDatabase() {
     abstract fun farmDao(): FarmDao
+
     abstract fun plotDao(): PlotDao
+
     abstract fun cropCycleDao(): CropCycleDao
+
     abstract fun farmActivityDao(): FarmActivityDao
+
     abstract fun transactionDao(): TransactionDao
 }

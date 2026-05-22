@@ -36,9 +36,10 @@ internal fun AddPlotDialog(
         confirmButton = {
             TextButton(
                 onClick = { onIntent(PlotListIntent.SubmitAddPlot) },
-                enabled = !state.isSubmitting &&
-                    state.draftName.isNotBlank() &&
-                    state.draftAreaText.isNotBlank(),
+                enabled =
+                    !state.isSubmitting &&
+                        state.draftName.isNotBlank() &&
+                        state.draftAreaText.isNotBlank(),
             ) { Text("Simpan") }
         },
         dismissButton = {
@@ -116,9 +117,10 @@ private fun <T> EnumDropdown(
             readOnly = true,
             label = { Text(label) },
             trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded) },
-            modifier = Modifier
-                .fillMaxWidth()
-                .menuAnchor(MenuAnchorType.PrimaryNotEditable),
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .menuAnchor(MenuAnchorType.PrimaryNotEditable),
         )
         ExposedDropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
             options.forEach { option ->

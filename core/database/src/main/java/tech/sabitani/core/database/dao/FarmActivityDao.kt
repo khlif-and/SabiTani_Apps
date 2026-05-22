@@ -10,7 +10,6 @@ import tech.sabitani.core.database.entity.FarmActivityEntity
 
 @Dao
 interface FarmActivityDao {
-
     @Query("SELECT * FROM farm_activities WHERE cycleId = :cycleId ORDER BY performedOnIso DESC, id DESC")
     fun observeByCycle(cycleId: Long): Flow<List<FarmActivityEntity>>
 

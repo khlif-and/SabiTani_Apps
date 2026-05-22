@@ -11,7 +11,6 @@ import tech.sabitani.core.database.projection.CycleTransactionTotals
 
 @Dao
 interface TransactionDao {
-
     @Query("SELECT * FROM transactions WHERE cycleId = :cycleId ORDER BY occurredOnIso DESC, id DESC")
     fun observeByCycle(cycleId: Long): Flow<List<TransactionEntity>>
 

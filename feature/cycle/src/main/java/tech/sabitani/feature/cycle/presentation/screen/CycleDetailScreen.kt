@@ -85,7 +85,10 @@ internal fun CycleDetailScreen(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun CycleDetailTopBar(cycle: CropCycle?, onBack: () -> Unit) {
+private fun CycleDetailTopBar(
+    cycle: CropCycle?,
+    onBack: () -> Unit,
+) {
     TopAppBar(
         title = { Text(cycle?.commodity ?: "Siklus Tanam") },
         navigationIcon = {
@@ -101,10 +104,11 @@ private fun CycleDetailFab(
     tab: CycleDetailTab,
     onIntent: (CycleDetailIntent) -> Unit,
 ) {
-    val action = when (tab) {
-        CycleDetailTab.ACTIVITIES -> ActivityIntent.OpenActivityDialog
-        CycleDetailTab.TRANSACTIONS -> TransactionIntent.OpenTransactionDialog
-    }
+    val action =
+        when (tab) {
+            CycleDetailTab.ACTIVITIES -> ActivityIntent.OpenActivityDialog
+            CycleDetailTab.TRANSACTIONS -> TransactionIntent.OpenTransactionDialog
+        }
     FloatingActionButton(onClick = { onIntent(action) }) {
         Icon(Icons.Default.Add, contentDescription = "Tambah")
     }
@@ -118,9 +122,10 @@ private fun CycleDetailBody(
     padding: PaddingValues,
 ) {
     Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(padding),
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .padding(padding),
         verticalArrangement = Arrangement.spacedBy(12.dp),
     ) {
         CycleSummaryCard(
@@ -146,10 +151,11 @@ private fun CycleDetailBody(
 }
 
 private val CycleDetailTab.label: String
-    get() = when (this) {
-        CycleDetailTab.ACTIVITIES -> "Aktivitas"
-        CycleDetailTab.TRANSACTIONS -> "Transaksi"
-    }
+    get() =
+        when (this) {
+            CycleDetailTab.ACTIVITIES -> "Aktivitas"
+            CycleDetailTab.TRANSACTIONS -> "Transaksi"
+        }
 
 fun NavGraphBuilder.cycleDetailScreen(onBack: () -> Unit) {
     composable<CycleDetailRoute> {

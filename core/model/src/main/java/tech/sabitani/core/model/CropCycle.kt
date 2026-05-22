@@ -16,7 +16,9 @@ data class CropCycle(
     val createdAt: Instant,
 )
 
-enum class CycleStatus(val displayName: String) {
+enum class CycleStatus(
+    val displayName: String,
+) {
     PLANNING("Direncanakan"),
     ACTIVE("Berjalan"),
     HARVESTED("Sudah Panen"),

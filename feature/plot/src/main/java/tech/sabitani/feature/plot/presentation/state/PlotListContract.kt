@@ -20,17 +20,42 @@ data class PlotListState(
 
 sealed interface PlotListIntent {
     data object OpenAddDialog : PlotListIntent
+
     data object DismissAddDialog : PlotListIntent
-    data class NameChanged(val value: String) : PlotListIntent
-    data class AreaChanged(val value: String) : PlotListIntent
-    data class SoilTypeChanged(val value: SoilType) : PlotListIntent
-    data class IrrigationTypeChanged(val value: IrrigationType) : PlotListIntent
-    data class NotesChanged(val value: String) : PlotListIntent
+
+    data class NameChanged(
+        val value: String,
+    ) : PlotListIntent
+
+    data class AreaChanged(
+        val value: String,
+    ) : PlotListIntent
+
+    data class SoilTypeChanged(
+        val value: SoilType,
+    ) : PlotListIntent
+
+    data class IrrigationTypeChanged(
+        val value: IrrigationType,
+    ) : PlotListIntent
+
+    data class NotesChanged(
+        val value: String,
+    ) : PlotListIntent
+
     data object SubmitAddPlot : PlotListIntent
-    data class PlotClicked(val plotId: Long) : PlotListIntent
+
+    data class PlotClicked(
+        val plotId: Long,
+    ) : PlotListIntent
 }
 
 sealed interface PlotListEffect {
-    data class ShowError(val message: String) : PlotListEffect
-    data class NavigateToPlotDetail(val plotId: Long) : PlotListEffect
+    data class ShowError(
+        val message: String,
+    ) : PlotListEffect
+
+    data class NavigateToPlotDetail(
+        val plotId: Long,
+    ) : PlotListEffect
 }
