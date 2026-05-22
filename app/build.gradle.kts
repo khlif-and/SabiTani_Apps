@@ -2,6 +2,7 @@ plugins {
     id("sabitani.android.application")
     id("sabitani.android.application.compose")
     id("sabitani.android.hilt")
+    alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.dependency.guard)
 }
 
@@ -39,6 +40,10 @@ dependencies {
     implementation(projects.feature.splash)
     implementation(projects.feature.onboarding)
     implementation(projects.feature.auth)
+    implementation(projects.feature.home)
+    implementation(projects.feature.plot)
+    implementation(projects.feature.cycle)
+    implementation(projects.core.model)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)

@@ -16,6 +16,9 @@ interface CropCycleDao {
     @Query("SELECT * FROM crop_cycles WHERE id = :id LIMIT 1")
     fun observeById(id: Long): Flow<CropCycleEntity?>
 
+    @Query("SELECT COUNT(*) FROM crop_cycles WHERE status = :status")
+    fun observeCountByStatus(status: String): Flow<Int>
+
     @Insert(onConflict = OnConflictStrategy.ABORT)
     suspend fun insert(entity: CropCycleEntity): Long
 

@@ -3,6 +3,7 @@ package tech.sabitani.app.navigation
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.composable
 import androidx.navigation.navOptions
 import tech.sabitani.core.navigation.SabiTaniNavHost
 import tech.sabitani.feature.auth.presentation.screen.LoginRoute
@@ -41,8 +42,14 @@ fun SabiTaniAppNavGraph(
         )
         loginScreen(
             onLoginSuccess = {
-                // TODO: navigate to :feature:home saat feature itu sudah ada (Phase berikutnya).
+                navController.navigate(
+                    route = MainShellRoute,
+                    navOptions = navOptions { popUpTo(LoginRoute) { inclusive = true } },
+                )
             },
         )
+        composable<MainShellRoute> {
+            SabiTaniMainShell()
+        }
     }
 }
