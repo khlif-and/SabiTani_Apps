@@ -56,4 +56,3 @@ dependencies {
 dependencyGuard {
     configuration("releaseRuntimeClasspath")
 }
-
