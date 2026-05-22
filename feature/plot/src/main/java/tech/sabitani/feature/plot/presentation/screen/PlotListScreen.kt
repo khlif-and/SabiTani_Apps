@@ -92,21 +92,7 @@ internal fun PlotListScreen(
     }
 
     if (state.isAddDialogVisible) {
-        AddPlotDialog(
-            name = state.draftName,
-            areaText = state.draftAreaText,
-            soilType = state.draftSoilType,
-            irrigationType = state.draftIrrigationType,
-            notes = state.draftNotes,
-            isSubmitting = state.isSubmitting,
-            onNameChange = { viewModel.onIntent(PlotListIntent.NameChanged(it)) },
-            onAreaChange = { viewModel.onIntent(PlotListIntent.AreaChanged(it)) },
-            onSoilTypeChange = { viewModel.onIntent(PlotListIntent.SoilTypeChanged(it)) },
-            onIrrigationTypeChange = { viewModel.onIntent(PlotListIntent.IrrigationTypeChanged(it)) },
-            onNotesChange = { viewModel.onIntent(PlotListIntent.NotesChanged(it)) },
-            onConfirm = { viewModel.onIntent(PlotListIntent.SubmitAddPlot) },
-            onDismiss = { viewModel.onIntent(PlotListIntent.DismissAddDialog) },
-        )
+        AddPlotDialog(state = state, onIntent = viewModel::onIntent)
     }
 }
 
@@ -133,8 +119,11 @@ private fun PlotList(
                     verticalArrangement = Arrangement.spacedBy(4.dp),
                 ) {
                     Text(plot.name, style = MaterialTheme.typography.titleMedium)
+                    val area = "%,.0f".format(plot.areaSqM)
+                    val subtitle = "$area m² · ${plot.soilType.displayName} · " +
+                        plot.irrigationType.displayName
                     Text(
-                        text = "${"%,.0f".format(plot.areaSqM)} m² · ${plot.soilType.displayName} · ${plot.irrigationType.displayName}",
+                        text = subtitle,
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )

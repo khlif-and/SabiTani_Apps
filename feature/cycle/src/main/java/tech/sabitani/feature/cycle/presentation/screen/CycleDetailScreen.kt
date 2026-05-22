@@ -29,14 +29,18 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import org.orbitmvi.orbit.compose.collectSideEffect
+import tech.sabitani.core.model.CropCycle
 import tech.sabitani.feature.cycle.presentation.component.ActivityFormDialog
 import tech.sabitani.feature.cycle.presentation.component.ActivityTimeline
 import tech.sabitani.feature.cycle.presentation.component.CycleSummaryCard
 import tech.sabitani.feature.cycle.presentation.component.TransactionFormDialog
 import tech.sabitani.feature.cycle.presentation.component.TransactionTimeline
+import tech.sabitani.feature.cycle.presentation.state.ActivityIntent
 import tech.sabitani.feature.cycle.presentation.state.CycleDetailEffect
 import tech.sabitani.feature.cycle.presentation.state.CycleDetailIntent
+import tech.sabitani.feature.cycle.presentation.state.CycleDetailState
 import tech.sabitani.feature.cycle.presentation.state.CycleDetailTab
+import tech.sabitani.feature.cycle.presentation.state.TransactionIntent
 import tech.sabitani.feature.cycle.presentation.viewmodel.CycleDetailViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -57,82 +61,87 @@ internal fun CycleDetailScreen(
 
     Scaffold(
         modifier = modifier.fillMaxSize(),
-        topBar = {
-            TopAppBar(
-                title = { Text(state.cycle?.commodity ?: "Siklus Tanam") },
-                navigationIcon = {
-                    IconButton(onClick = onBack) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Kembali")
-                    }
-                },
-            )
-        },
-        floatingActionButton = {
-            val intent = when (state.selectedTab) {
-                CycleDetailTab.ACTIVITIES -> CycleDetailIntent.OpenActivityDialog
-                CycleDetailTab.TRANSACTIONS -> CycleDetailIntent.OpenTransactionDialog
-            }
-            FloatingActionButton(onClick = { viewModel.onIntent(intent) }) {
-                Icon(Icons.Default.Add, contentDescription = "Tambah")
-            }
-        },
+        topBar = { CycleDetailTopBar(cycle = state.cycle, onBack = onBack) },
+        floatingActionButton = { CycleDetailFab(tab = state.selectedTab, onIntent = viewModel::onIntent) },
         snackbarHost = { SnackbarHost(snackbarHostState) },
     ) { padding ->
         state.cycle?.let { cycle ->
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(padding),
-                verticalArrangement = Arrangement.spacedBy(12.dp),
-            ) {
-                CycleSummaryCard(
-                    cycle = cycle,
-                    costSummary = state.costSummary,
-                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
-                )
-                TabRow(selectedTabIndex = state.selectedTab.ordinal) {
-                    CycleDetailTab.entries.forEach { tab ->
-                        Tab(
-                            selected = state.selectedTab == tab,
-                            onClick = { viewModel.onIntent(CycleDetailIntent.TabSelected(tab)) },
-                            text = { Text(tab.label) },
-                        )
-                    }
-                }
-                val listPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
-                when (state.selectedTab) {
-                    CycleDetailTab.ACTIVITIES ->
-                        ActivityTimeline(state.activities, contentPadding = listPadding)
-                    CycleDetailTab.TRANSACTIONS ->
-                        TransactionTimeline(state.transactions, contentPadding = listPadding)
-                }
-            }
+            CycleDetailBody(
+                cycle = cycle,
+                state = state,
+                onIntent = viewModel::onIntent,
+                padding = padding,
+            )
         }
     }
 
     state.activityDraft?.let { draft ->
-        ActivityFormDialog(
-            draft = draft,
-            onTypeChange = { viewModel.onIntent(CycleDetailIntent.ActivityTypeChanged(it)) },
-            onDateChange = { viewModel.onIntent(CycleDetailIntent.ActivityDateChanged(it)) },
-            onMaterialChange = { viewModel.onIntent(CycleDetailIntent.ActivityMaterialChanged(it)) },
-            onDosageChange = { viewModel.onIntent(CycleDetailIntent.ActivityDosageChanged(it)) },
-            onNotesChange = { viewModel.onIntent(CycleDetailIntent.ActivityNotesChanged(it)) },
-            onConfirm = { viewModel.onIntent(CycleDetailIntent.SubmitActivity) },
-            onDismiss = { viewModel.onIntent(CycleDetailIntent.DismissActivityDialog) },
-        )
+        ActivityFormDialog(draft = draft, onIntent = viewModel::onIntent)
     }
-
     state.transactionDraft?.let { draft ->
-        TransactionFormDialog(
-            draft = draft,
-            onCategoryChange = { viewModel.onIntent(CycleDetailIntent.TransactionCategoryChanged(it)) },
-            onAmountChange = { viewModel.onIntent(CycleDetailIntent.TransactionAmountChanged(it)) },
-            onDateChange = { viewModel.onIntent(CycleDetailIntent.TransactionDateChanged(it)) },
-            onNotesChange = { viewModel.onIntent(CycleDetailIntent.TransactionNotesChanged(it)) },
-            onConfirm = { viewModel.onIntent(CycleDetailIntent.SubmitTransaction) },
-            onDismiss = { viewModel.onIntent(CycleDetailIntent.DismissTransactionDialog) },
+        TransactionFormDialog(draft = draft, onIntent = viewModel::onIntent)
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun CycleDetailTopBar(cycle: CropCycle?, onBack: () -> Unit) {
+    TopAppBar(
+        title = { Text(cycle?.commodity ?: "Siklus Tanam") },
+        navigationIcon = {
+            IconButton(onClick = onBack) {
+                Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Kembali")
+            }
+        },
+    )
+}
+
+@Composable
+private fun CycleDetailFab(
+    tab: CycleDetailTab,
+    onIntent: (CycleDetailIntent) -> Unit,
+) {
+    val action = when (tab) {
+        CycleDetailTab.ACTIVITIES -> ActivityIntent.OpenActivityDialog
+        CycleDetailTab.TRANSACTIONS -> TransactionIntent.OpenTransactionDialog
+    }
+    FloatingActionButton(onClick = { onIntent(action) }) {
+        Icon(Icons.Default.Add, contentDescription = "Tambah")
+    }
+}
+
+@Composable
+private fun CycleDetailBody(
+    cycle: CropCycle,
+    state: CycleDetailState,
+    onIntent: (CycleDetailIntent) -> Unit,
+    padding: PaddingValues,
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(padding),
+        verticalArrangement = Arrangement.spacedBy(12.dp),
+    ) {
+        CycleSummaryCard(
+            cycle = cycle,
+            costSummary = state.costSummary,
+            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
         )
+        TabRow(selectedTabIndex = state.selectedTab.ordinal) {
+            CycleDetailTab.entries.forEach { tab ->
+                Tab(
+                    selected = state.selectedTab == tab,
+                    onClick = { onIntent(CycleDetailIntent.TabSelected(tab)) },
+                    text = { Text(tab.label) },
+                )
+            }
+        }
+        val listPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
+        when (state.selectedTab) {
+            CycleDetailTab.ACTIVITIES -> ActivityTimeline(state.activities, listPadding)
+            CycleDetailTab.TRANSACTIONS -> TransactionTimeline(state.transactions, listPadding)
+        }
     }
 }
 

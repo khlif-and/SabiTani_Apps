@@ -22,10 +22,12 @@ import tech.sabitani.feature.cycle.domain.usecase.ObserveCycleDetailUseCase
 import tech.sabitani.feature.cycle.domain.usecase.ObserveTransactionsUseCase
 import tech.sabitani.feature.cycle.presentation.screen.CycleDetailRoute
 import tech.sabitani.feature.cycle.presentation.state.ActivityDraft
+import tech.sabitani.feature.cycle.presentation.state.ActivityIntent
 import tech.sabitani.feature.cycle.presentation.state.CycleDetailEffect
 import tech.sabitani.feature.cycle.presentation.state.CycleDetailIntent
 import tech.sabitani.feature.cycle.presentation.state.CycleDetailState
 import tech.sabitani.feature.cycle.presentation.state.TransactionDraft
+import tech.sabitani.feature.cycle.presentation.state.TransactionIntent
 
 @HiltViewModel
 internal class CycleDetailViewModel @Inject constructor(
@@ -67,33 +69,44 @@ internal class CycleDetailViewModel @Inject constructor(
     fun onIntent(action: CycleDetailIntent) {
         when (action) {
             is CycleDetailIntent.TabSelected -> reduceState { it.copy(selectedTab = action.tab) }
-            CycleDetailIntent.OpenActivityDialog -> openActivityDialog()
-            CycleDetailIntent.DismissActivityDialog ->
-                reduceState { it.copy(activityDraft = null) }
-            is CycleDetailIntent.ActivityTypeChanged ->
-                updateActivity { it.copy(type = action.value) }
-            is CycleDetailIntent.ActivityDateChanged ->
-                updateActivity { it.copy(performedOn = action.value) }
-            is CycleDetailIntent.ActivityMaterialChanged ->
-                updateActivity { it.copy(material = action.value) }
-            is CycleDetailIntent.ActivityDosageChanged ->
-                updateActivity { it.copy(dosage = action.value) }
-            is CycleDetailIntent.ActivityNotesChanged ->
-                updateActivity { it.copy(notes = action.value) }
-            CycleDetailIntent.SubmitActivity -> submitActivity()
+            is ActivityIntent -> handleActivityIntent(action)
+            is TransactionIntent -> handleTransactionIntent(action)
+        }
+    }
 
-            CycleDetailIntent.OpenTransactionDialog -> openTransactionDialog()
-            CycleDetailIntent.DismissTransactionDialog ->
+    private fun handleActivityIntent(action: ActivityIntent) {
+        when (action) {
+            ActivityIntent.OpenActivityDialog -> openActivityDialog()
+            ActivityIntent.DismissActivityDialog ->
+                reduceState { it.copy(activityDraft = null) }
+            is ActivityIntent.ActivityTypeChanged ->
+                updateActivity { it.copy(type = action.value) }
+            is ActivityIntent.ActivityDateChanged ->
+                updateActivity { it.copy(performedOn = action.value) }
+            is ActivityIntent.ActivityMaterialChanged ->
+                updateActivity { it.copy(material = action.value) }
+            is ActivityIntent.ActivityDosageChanged ->
+                updateActivity { it.copy(dosage = action.value) }
+            is ActivityIntent.ActivityNotesChanged ->
+                updateActivity { it.copy(notes = action.value) }
+            ActivityIntent.SubmitActivity -> submitActivity()
+        }
+    }
+
+    private fun handleTransactionIntent(action: TransactionIntent) {
+        when (action) {
+            TransactionIntent.OpenTransactionDialog -> openTransactionDialog()
+            TransactionIntent.DismissTransactionDialog ->
                 reduceState { it.copy(transactionDraft = null) }
-            is CycleDetailIntent.TransactionCategoryChanged ->
+            is TransactionIntent.TransactionCategoryChanged ->
                 updateTransaction { it.copy(category = action.value) }
-            is CycleDetailIntent.TransactionAmountChanged ->
+            is TransactionIntent.TransactionAmountChanged ->
                 updateTransaction { it.copy(amountText = action.value) }
-            is CycleDetailIntent.TransactionDateChanged ->
+            is TransactionIntent.TransactionDateChanged ->
                 updateTransaction { it.copy(occurredOn = action.value) }
-            is CycleDetailIntent.TransactionNotesChanged ->
+            is TransactionIntent.TransactionNotesChanged ->
                 updateTransaction { it.copy(notes = action.value) }
-            CycleDetailIntent.SubmitTransaction -> submitTransaction()
+            TransactionIntent.SubmitTransaction -> submitTransaction()
         }
     }
 

@@ -41,22 +41,27 @@ data class CycleDetailState(
 
 sealed interface CycleDetailIntent {
     data class TabSelected(val tab: CycleDetailTab) : CycleDetailIntent
-    data object OpenActivityDialog : CycleDetailIntent
-    data object DismissActivityDialog : CycleDetailIntent
-    data class ActivityTypeChanged(val value: ActivityType) : CycleDetailIntent
-    data class ActivityDateChanged(val value: LocalDate) : CycleDetailIntent
-    data class ActivityMaterialChanged(val value: String) : CycleDetailIntent
-    data class ActivityDosageChanged(val value: String) : CycleDetailIntent
-    data class ActivityNotesChanged(val value: String) : CycleDetailIntent
-    data object SubmitActivity : CycleDetailIntent
+}
 
-    data object OpenTransactionDialog : CycleDetailIntent
-    data object DismissTransactionDialog : CycleDetailIntent
-    data class TransactionCategoryChanged(val value: TransactionCategory) : CycleDetailIntent
-    data class TransactionAmountChanged(val value: String) : CycleDetailIntent
-    data class TransactionDateChanged(val value: LocalDate) : CycleDetailIntent
-    data class TransactionNotesChanged(val value: String) : CycleDetailIntent
-    data object SubmitTransaction : CycleDetailIntent
+sealed interface ActivityIntent : CycleDetailIntent {
+    data object OpenActivityDialog : ActivityIntent
+    data object DismissActivityDialog : ActivityIntent
+    data class ActivityTypeChanged(val value: ActivityType) : ActivityIntent
+    data class ActivityDateChanged(val value: LocalDate) : ActivityIntent
+    data class ActivityMaterialChanged(val value: String) : ActivityIntent
+    data class ActivityDosageChanged(val value: String) : ActivityIntent
+    data class ActivityNotesChanged(val value: String) : ActivityIntent
+    data object SubmitActivity : ActivityIntent
+}
+
+sealed interface TransactionIntent : CycleDetailIntent {
+    data object OpenTransactionDialog : TransactionIntent
+    data object DismissTransactionDialog : TransactionIntent
+    data class TransactionCategoryChanged(val value: TransactionCategory) : TransactionIntent
+    data class TransactionAmountChanged(val value: String) : TransactionIntent
+    data class TransactionDateChanged(val value: LocalDate) : TransactionIntent
+    data class TransactionNotesChanged(val value: String) : TransactionIntent
+    data object SubmitTransaction : TransactionIntent
 }
 
 sealed interface CycleDetailEffect {

@@ -9,6 +9,7 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
+import androidx.compose.material3.MenuAnchorType
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -22,79 +23,80 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import tech.sabitani.core.model.IrrigationType
 import tech.sabitani.core.model.SoilType
+import tech.sabitani.feature.plot.presentation.state.PlotListIntent
+import tech.sabitani.feature.plot.presentation.state.PlotListState
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun AddPlotDialog(
-    name: String,
-    areaText: String,
-    soilType: SoilType,
-    irrigationType: IrrigationType,
-    notes: String,
-    isSubmitting: Boolean,
-    onNameChange: (String) -> Unit,
-    onAreaChange: (String) -> Unit,
-    onSoilTypeChange: (SoilType) -> Unit,
-    onIrrigationTypeChange: (IrrigationType) -> Unit,
-    onNotesChange: (String) -> Unit,
-    onConfirm: () -> Unit,
-    onDismiss: () -> Unit,
+    state: PlotListState,
+    onIntent: (PlotListIntent) -> Unit,
 ) {
     AlertDialog(
-        onDismissRequest = onDismiss,
+        onDismissRequest = { onIntent(PlotListIntent.DismissAddDialog) },
         confirmButton = {
             TextButton(
-                onClick = onConfirm,
-                enabled = !isSubmitting && name.isNotBlank() && areaText.isNotBlank(),
+                onClick = { onIntent(PlotListIntent.SubmitAddPlot) },
+                enabled = !state.isSubmitting &&
+                    state.draftName.isNotBlank() &&
+                    state.draftAreaText.isNotBlank(),
             ) { Text("Simpan") }
         },
         dismissButton = {
-            TextButton(onClick = onDismiss, enabled = !isSubmitting) { Text("Batal") }
+            TextButton(
+                onClick = { onIntent(PlotListIntent.DismissAddDialog) },
+                enabled = !state.isSubmitting,
+            ) { Text("Batal") }
         },
         title = { Text("Tambah Petak") },
-        text = {
-            Column(
-                verticalArrangement = Arrangement.spacedBy(12.dp),
-                modifier = Modifier.fillMaxWidth(),
-            ) {
-                OutlinedTextField(
-                    value = name,
-                    onValueChange = onNameChange,
-                    label = { Text("Nama petak") },
-                    singleLine = true,
-                    modifier = Modifier.fillMaxWidth(),
-                )
-                OutlinedTextField(
-                    value = areaText,
-                    onValueChange = onAreaChange,
-                    label = { Text("Luas (m²)") },
-                    singleLine = true,
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
-                    modifier = Modifier.fillMaxWidth(),
-                )
-                EnumDropdown(
-                    label = "Jenis tanah",
-                    options = SoilType.entries,
-                    selected = soilType,
-                    displayName = SoilType::displayName,
-                    onSelected = onSoilTypeChange,
-                )
-                EnumDropdown(
-                    label = "Irigasi",
-                    options = IrrigationType.entries,
-                    selected = irrigationType,
-                    displayName = IrrigationType::displayName,
-                    onSelected = onIrrigationTypeChange,
-                )
-                OutlinedTextField(
-                    value = notes,
-                    onValueChange = onNotesChange,
-                    label = { Text("Catatan (opsional)") },
-                    modifier = Modifier.fillMaxWidth(),
-                )
-            }
-        },
+        text = { AddPlotFormFields(state = state, onIntent = onIntent) },
     )
+}
+
+@Composable
+private fun AddPlotFormFields(
+    state: PlotListState,
+    onIntent: (PlotListIntent) -> Unit,
+) {
+    Column(
+        verticalArrangement = Arrangement.spacedBy(12.dp),
+        modifier = Modifier.fillMaxWidth(),
+    ) {
+        OutlinedTextField(
+            value = state.draftName,
+            onValueChange = { onIntent(PlotListIntent.NameChanged(it)) },
+            label = { Text("Nama petak") },
+            singleLine = true,
+            modifier = Modifier.fillMaxWidth(),
+        )
+        OutlinedTextField(
+            value = state.draftAreaText,
+            onValueChange = { onIntent(PlotListIntent.AreaChanged(it)) },
+            label = { Text("Luas (m²)") },
+            singleLine = true,
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+            modifier = Modifier.fillMaxWidth(),
+        )
+        EnumDropdown(
+            label = "Jenis tanah",
+            options = SoilType.entries,
+            selected = state.draftSoilType,
+            displayName = SoilType::displayName,
+            onSelected = { onIntent(PlotListIntent.SoilTypeChanged(it)) },
+        )
+        EnumDropdown(
+            label = "Irigasi",
+            options = IrrigationType.entries,
+            selected = state.draftIrrigationType,
+            displayName = IrrigationType::displayName,
+            onSelected = { onIntent(PlotListIntent.IrrigationTypeChanged(it)) },
+        )
+        OutlinedTextField(
+            value = state.draftNotes,
+            onValueChange = { onIntent(PlotListIntent.NotesChanged(it)) },
+            label = { Text("Catatan (opsional)") },
+            modifier = Modifier.fillMaxWidth(),
+        )
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -116,7 +118,7 @@ private fun <T> EnumDropdown(
             trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded) },
             modifier = Modifier
                 .fillMaxWidth()
-                .menuAnchor(),
+                .menuAnchor(MenuAnchorType.PrimaryNotEditable),
         )
         ExposedDropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
             options.forEach { option ->

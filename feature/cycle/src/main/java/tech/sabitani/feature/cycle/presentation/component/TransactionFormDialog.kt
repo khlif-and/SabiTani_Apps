@@ -13,59 +13,70 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import tech.sabitani.core.model.TransactionCategory
+import tech.sabitani.feature.cycle.presentation.state.CycleDetailIntent
 import tech.sabitani.feature.cycle.presentation.state.TransactionDraft
+import tech.sabitani.feature.cycle.presentation.state.TransactionIntent
 
 @Composable
 internal fun TransactionFormDialog(
     draft: TransactionDraft,
-    onCategoryChange: (TransactionCategory) -> Unit,
-    onAmountChange: (String) -> Unit,
-    onDateChange: (kotlinx.datetime.LocalDate) -> Unit,
-    onNotesChange: (String) -> Unit,
-    onConfirm: () -> Unit,
-    onDismiss: () -> Unit,
+    onIntent: (CycleDetailIntent) -> Unit,
 ) {
     AlertDialog(
-        onDismissRequest = onDismiss,
+        onDismissRequest = { onIntent(TransactionIntent.DismissTransactionDialog) },
         confirmButton = {
-            TextButton(onClick = onConfirm, enabled = !draft.isSubmitting) { Text("Simpan") }
+            TextButton(
+                onClick = { onIntent(TransactionIntent.SubmitTransaction) },
+                enabled = !draft.isSubmitting,
+            ) { Text("Simpan") }
         },
         dismissButton = {
-            TextButton(onClick = onDismiss, enabled = !draft.isSubmitting) { Text("Batal") }
+            TextButton(
+                onClick = { onIntent(TransactionIntent.DismissTransactionDialog) },
+                enabled = !draft.isSubmitting,
+            ) { Text("Batal") }
         },
         title = { Text("Catat Transaksi") },
-        text = {
-            Column(
-                modifier = Modifier.fillMaxWidth(),
-                verticalArrangement = Arrangement.spacedBy(12.dp),
-            ) {
-                EnumDropdown(
-                    label = "Kategori",
-                    options = TransactionCategory.entries,
-                    selected = draft.category,
-                    displayName = { "${it.type.displayName} · ${it.displayName}" },
-                    onSelected = onCategoryChange,
-                )
-                OutlinedTextField(
-                    value = draft.amountText,
-                    onValueChange = onAmountChange,
-                    label = { Text("Nominal (Rp)") },
-                    singleLine = true,
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                    modifier = Modifier.fillMaxWidth(),
-                )
-                DatePickerField(
-                    label = "Tanggal",
-                    value = draft.occurredOn,
-                    onValueChange = { it?.let(onDateChange) },
-                )
-                OutlinedTextField(
-                    value = draft.notes,
-                    onValueChange = onNotesChange,
-                    label = { Text("Catatan (opsional)") },
-                    modifier = Modifier.fillMaxWidth(),
-                )
-            }
-        },
+        text = { TransactionFormFields(draft = draft, onIntent = onIntent) },
     )
+}
+
+@Composable
+private fun TransactionFormFields(
+    draft: TransactionDraft,
+    onIntent: (CycleDetailIntent) -> Unit,
+) {
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        verticalArrangement = Arrangement.spacedBy(12.dp),
+    ) {
+        EnumDropdown(
+            label = "Kategori",
+            options = TransactionCategory.entries,
+            selected = draft.category,
+            displayName = { "${it.type.displayName} · ${it.displayName}" },
+            onSelected = { onIntent(TransactionIntent.TransactionCategoryChanged(it)) },
+        )
+        OutlinedTextField(
+            value = draft.amountText,
+            onValueChange = { onIntent(TransactionIntent.TransactionAmountChanged(it)) },
+            label = { Text("Nominal (Rp)") },
+            singleLine = true,
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+            modifier = Modifier.fillMaxWidth(),
+        )
+        DatePickerField(
+            label = "Tanggal",
+            value = draft.occurredOn,
+            onValueChange = { date ->
+                date?.let { onIntent(TransactionIntent.TransactionDateChanged(it)) }
+            },
+        )
+        OutlinedTextField(
+            value = draft.notes,
+            onValueChange = { onIntent(TransactionIntent.TransactionNotesChanged(it)) },
+            label = { Text("Catatan (opsional)") },
+            modifier = Modifier.fillMaxWidth(),
+        )
+    }
 }

@@ -79,17 +79,7 @@ internal fun FarmListScreen(
     }
 
     if (state.isAddDialogVisible) {
-        AddFarmDialog(
-            name = state.draftName,
-            location = state.draftLocation,
-            totalAreaText = state.draftTotalAreaText,
-            isSubmitting = state.isSubmitting,
-            onNameChange = { viewModel.onIntent(FarmListIntent.NameChanged(it)) },
-            onLocationChange = { viewModel.onIntent(FarmListIntent.LocationChanged(it)) },
-            onAreaChange = { viewModel.onIntent(FarmListIntent.TotalAreaChanged(it)) },
-            onConfirm = { viewModel.onIntent(FarmListIntent.SubmitAddFarm) },
-            onDismiss = { viewModel.onIntent(FarmListIntent.DismissAddDialog) },
-        )
+        AddFarmDialog(state = state, onIntent = viewModel::onIntent)
     }
 }
 
