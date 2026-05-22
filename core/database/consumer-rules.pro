@@ -1,0 +1,3 @@
+-keep class net.sqlcipher.** { *; }
+-keep class net.zetetic.database.** { *; }
+-dontwarn net.zetetic.database.**
