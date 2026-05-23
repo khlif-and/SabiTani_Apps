@@ -6,6 +6,24 @@ plugins {
     alias(libs.plugins.dependency.guard)
 }
 
+val googleServicesFile = file("google-services.json")
+val firebaseEnabled = googleServicesFile.exists()
+
+if (firebaseEnabled) {
+    apply(
+        plugin =
+            libs.plugins.google.services
+                .get()
+                .pluginId,
+    )
+    apply(
+        plugin =
+            libs.plugins.firebase.crashlytics
+                .get()
+                .pluginId,
+    )
+}
+
 android {
     namespace = "tech.sabitani.app"
 

@@ -105,6 +105,20 @@ internal fun SecuritySettingsScreen(
                     )
                 },
             )
+            HorizontalDivider()
+            ToggleRow(
+                title = "Analitik Anonim",
+                description =
+                    "Bantu kami memperbaiki aplikasi dengan kirim laporan error anonim. " +
+                        "Tidak ada data pribadi yang dikirim.",
+                checked = state.isAnalyticsEnabled,
+                enabled = !state.isProcessing,
+                onCheckedChange = { enabled ->
+                    viewModel.onIntent(
+                        SecuritySettingsIntent.AnalyticsConsentToggled(enabled = enabled),
+                    )
+                },
+            )
         }
     }
 
