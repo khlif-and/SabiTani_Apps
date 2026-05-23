@@ -1,0 +1,44 @@
+[
+  {
+    "id": "pesticide-imidakloprid",
+    "title": "Imidakloprid (Insektisida Sistemik)",
+    "summary": "Insektisida neonikotinoid untuk hama penghisap.",
+    "keywords": ["imidakloprid", "neonikotinoid", "wereng", "kutu", "sistemik"],
+    "body": "Golongan: neonikotinoid sistemik. Target: wereng coklat, kutu daun, thrips, lalat putih. Dosis: 0.25-0.5 ml/liter air. Catatan: berbahaya untuk lebah, hindari aplikasi saat berbunga. Rotasi dengan golongan lain (buprofezin) untuk cegah resistensi."
+  },
+  {
+    "id": "pesticide-mankozeb",
+    "title": "Mankozeb (Fungisida Kontak)",
+    "summary": "Fungisida spektrum luas untuk berbagai penyakit jamur.",
+    "keywords": ["mankozeb", "dithane", "fungisida", "kontak", "jamur"],
+    "body": "Golongan: dithiocarbamate kontak. Target: blast padi, antraknosa cabai, hawar jagung, busuk daun kentang. Dosis: 2-3 g/liter air, semprot setiap 7-10 hari. Bersifat preventif (lebih efektif sebelum infeksi). Aman untuk PHT karena tidak sistemik."
+  },
+  {
+    "id": "pesticide-buprofezin",
+    "title": "Buprofezin (Insektisida IGR)",
+    "summary": "Insektisida penghambat pertumbuhan nimfa wereng dan kutu.",
+    "keywords": ["buprofezin", "applaud", "wereng", "igr", "nimfa"],
+    "body": "Golongan: insect growth regulator (IGR). Target: nimfa wereng coklat, kutu daun, kutu putih. Dosis: 0.5-1 g/liter. Mekanisme: menghambat sintesis kitin sehingga nimfa gagal molting. Aman untuk musuh alami (laba-laba, kepik predator)."
+  },
+  {
+    "id": "pesticide-difenokonazol",
+    "title": "Difenokonazol (Fungisida Sistemik)",
+    "summary": "Fungisida triazol untuk penyakit jamur sistemik.",
+    "keywords": ["difenokonazol", "score", "triazol", "sistemik", "fungisida"],
+    "body": "Golongan: triazol sistemik. Target: antraknosa, karat daun, busuk daun, hawar jagung. Dosis: 0.5 ml/liter. Bersifat kuratif + preventif. Diserap tanaman dan melindungi dari dalam. Rotasi dengan mankozeb untuk cegah resistensi."
+  },
+  {
+    "id": "pesticide-klorpirifos",
+    "title": "Klorpirifos (Insektisida Organofosfat)",
+    "summary": "Insektisida kontak + lambung untuk hama berbahaya.",
+    "keywords": ["klorpirifos", "dursban", "organofosfat", "ulat", "penggerek"],
+    "body": "Golongan: organofosfat. Target: ulat grayak, penggerek batang, ulat kubis. Dosis: 1-2 ml/liter. Catatan: toksisitas tinggi, dilarang di beberapa negara. Pakai APD lengkap, hindari aplikasi dekat panen (PHI 14 hari). Pertimbangkan alternatif lebih aman (klorantraniliprol)."
+  },
+  {
+    "id": "pesticide-trichoderma",
+    "title": "Trichoderma (Agen Hayati)",
+    "summary": "Jamur antagonis pengendali penyakit tanah secara alami.",
+    "keywords": ["trichoderma", "agen hayati", "biofungisida", "kompos"],
+    "body": "Bentuk: bubuk atau cair, mengandung spora Trichoderma harzianum/viride. Target: layu fusarium, busuk akar, layu bakteri. Aplikasi: campur 200 g/100 kg kompos saat olah tanah, atau kocor 5-10 g/liter air ke perakaran. Aman pangan + lingkungan."
+  }
+]

@@ -1,0 +1,44 @@
+[
+  {
+    "id": "variety-inpari-32",
+    "title": "Inpari 32 HDB (Padi)",
+    "summary": "Varietas padi tahan hawar daun bakteri, hasil tinggi.",
+    "keywords": ["inpari 32", "padi", "hdb", "tahan kresek"],
+    "body": "Tipe: inbrida sawah irigasi. Umur: 120 hari. Potensi hasil: 8.4 t/ha (rata-rata 6.3 t/ha). Keunggulan: agak tahan hawar daun bakteri patotipe III & IV, agak tahan blast. Tekstur: pulen. Cocok untuk: daerah endemik kresek (Karawang, Indramayu)."
+  },
+  {
+    "id": "variety-inpari-42",
+    "title": "Inpari 42 GSR (Padi)",
+    "summary": "Varietas green super rice toleran kering, hasil tinggi.",
+    "keywords": ["inpari 42", "gsr", "padi", "green super rice", "toleran kering"],
+    "body": "Tipe: inbrida sawah irigasi. Umur: 112 hari. Potensi hasil: 10.5 t/ha (rata-rata 7.1 t/ha). Keunggulan: toleran kering fase vegetatif, tahan blast leher, agak tahan HDB. Tekstur: pulen. Cocok untuk: musim kemarau, daerah tadah hujan."
+  },
+  {
+    "id": "variety-ciherang",
+    "title": "Ciherang (Padi)",
+    "summary": "Varietas padi legendaris dengan adaptasi luas.",
+    "keywords": ["ciherang", "padi", "inbrida"],
+    "body": "Tipe: inbrida sawah irigasi. Umur: 116-125 hari. Potensi hasil: 8.5 t/ha (rata-rata 5-6 t/ha). Keunggulan: adaptasi luas, tekstur pulen, rasa enak, dapat dipasar premium. Kelemahan: rentan wereng coklat populasi baru. Rekomendasi rotasi dengan Inpari 13/33."
+  },
+  {
+    "id": "variety-mekongga",
+    "title": "Mekongga (Padi)",
+    "summary": "Varietas padi adaptasi luas dengan rasa pulen.",
+    "keywords": ["mekongga", "padi"],
+    "body": "Tipe: inbrida sawah irigasi. Umur: 116-125 hari. Potensi hasil: 8.4 t/ha. Keunggulan: tekstur pulen, agak tahan wereng coklat biotipe 2 dan 3, agak tahan HDB strain III & IV. Cocok untuk: dataran rendah sampai sedang."
+  },
+  {
+    "id": "variety-jagung-bisi-18",
+    "title": "Jagung Hibrida BISI-18",
+    "summary": "Jagung hibrida hasil tinggi dengan adaptasi luas.",
+    "keywords": ["bisi-18", "bisi 18", "jagung", "hibrida"],
+    "body": "Tipe: hibrida silang tunggal. Umur: 95-100 hari. Potensi hasil: 12 t/ha (rata-rata 9.0 t/ha pipilan kering). Keunggulan: batang kokoh tidak mudah rebah, tongkol besar, rendemen tinggi. Cocok dataran rendah sampai 800 mdpl."
+  },
+  {
+    "id": "variety-cabai-tanjung",
+    "title": "Cabai Rawit Tanjung-2",
+    "summary": "Cabai rawit unggul Balitsa adaptif dataran rendah.",
+    "keywords": ["cabai rawit", "tanjung-2", "balitsa"],
+    "body": "Tipe: cabai rawit dataran rendah. Umur panen: 70-80 HST. Potensi hasil: 12-15 t/ha. Keunggulan: tahan virus kuning (gemini), buah lebat, pedas tinggi. Cocok untuk pasar rawit basah dan kering."
+  }
+]

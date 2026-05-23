@@ -33,6 +33,8 @@ import tech.sabitani.feature.plot.presentation.screen.PlotListRoute
 import tech.sabitani.feature.plot.presentation.screen.farmListScreen
 import tech.sabitani.feature.plot.presentation.screen.plotDetailScreen
 import tech.sabitani.feature.plot.presentation.screen.plotListScreen
+import tech.sabitani.feature.tania.presentation.screen.ChatRoute
+import tech.sabitani.feature.tania.presentation.screen.chatScreen
 
 @Composable
 internal fun SabiTaniMainShell(modifier: Modifier = Modifier) {
@@ -86,7 +88,7 @@ internal fun SabiTaniMainShell(modifier: Modifier = Modifier) {
                 },
             )
             cycleDetailScreen(onBack = { mainNavController.popBackStack() })
-            taniaPlaceholderScreen()
+            chatScreen()
             profileScreen(
                 onOpenSecurity = { mainNavController.navigate(SecuritySettingsRoute) },
             )
@@ -132,7 +134,7 @@ private fun NavHostController.navigateToTopLevel(destination: TopLevelDestinatio
         when (destination) {
             TopLevelDestination.HOME -> HomeRoute
             TopLevelDestination.KEBUN -> FarmListRoute
-            TopLevelDestination.TANIA -> TaniaPlaceholderRoute
+            TopLevelDestination.TANIA -> ChatRoute
             TopLevelDestination.PROFIL -> ProfileRoute
         }
     navigate(route = route, navOptions = topLevelOptions)

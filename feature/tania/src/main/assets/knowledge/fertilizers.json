@@ -1,0 +1,51 @@
+[
+  {
+    "id": "fertilizer-urea",
+    "title": "Urea (46% N)",
+    "summary": "Pupuk nitrogen tunggal paling umum di Indonesia.",
+    "keywords": ["urea", "nitrogen", "n", "pupuk", "daun"],
+    "body": "Kandungan: 46% N. Fungsi: memacu pertumbuhan daun dan batang. Dosis padi sawah: 200-300 kg/ha terbagi 2-3 kali aplikasi (saat tanam, 21 HST, 45 HST). Catatan: terlalu banyak N memicu blast dan kresek; kombinasikan dengan KCl untuk batang kuat."
+  },
+  {
+    "id": "fertilizer-npk-phonska",
+    "title": "NPK Phonska 15-15-15",
+    "summary": "Pupuk majemuk seimbang N, P, K dari Petrokimia Gresik.",
+    "keywords": ["npk", "phonska", "majemuk", "15-15-15"],
+    "body": "Kandungan: 15% N, 15% P2O5, 15% K2O, 10% S. Fungsi: nutrisi lengkap untuk semua fase tanaman. Dosis padi sawah: 300 kg/ha (aplikasi 2x). Cocok untuk: padi, jagung, cabai, kedelai. Subsidi pemerintah tersedia via Kartu Tani."
+  },
+  {
+    "id": "fertilizer-kcl",
+    "title": "KCl / MOP (60% K2O)",
+    "summary": "Pupuk kalium tunggal untuk perkuat batang dan kualitas buah.",
+    "keywords": ["kcl", "mop", "kalium", "k", "potash"],
+    "body": "Kandungan: 60% K2O. Fungsi: penguatan batang, kualitas bulir, ketahanan penyakit, pengisian buah. Dosis padi: 50-100 kg/ha. Aplikasi bersama N memberi hasil optimal. Penting saat fase pembungaan dan pengisian bulir."
+  },
+  {
+    "id": "fertilizer-sp36",
+    "title": "SP-36 (36% P2O5)",
+    "summary": "Pupuk fosfat tunggal untuk pertumbuhan akar.",
+    "keywords": ["sp-36", "sp36", "fosfat", "p", "akar"],
+    "body": "Kandungan: 36% P2O5 + 5% S. Fungsi: pertumbuhan akar, pembungaan, pembentukan biji. Dosis padi sawah: 100 kg/ha sekali aplikasi sebagai pupuk dasar saat tanam atau sebelum tanam. Tabur di larikan dan tutup tanah."
+  },
+  {
+    "id": "fertilizer-za",
+    "title": "ZA (21% N + 24% S)",
+    "summary": "Pupuk nitrogen dengan tambahan sulfur, cocok tanaman bawang dan tebu.",
+    "keywords": ["za", "ammonium sulfat", "nitrogen", "sulfur", "bawang"],
+    "body": "Kandungan: 21% N + 24% S. Fungsi: nitrogen + sulfur penting untuk pembentukan klorofil dan asam amino. Cocok untuk: bawang merah, tebu, kentang. Dosis bawang merah: 200-300 kg/ha. Bersifat sedikit masamkan tanah, baik untuk tanah basa."
+  },
+  {
+    "id": "fertilizer-organik-cair",
+    "title": "Pupuk Organik Cair (POC)",
+    "summary": "Pupuk hayati cair berbahan dasar fermentasi limbah organik.",
+    "keywords": ["poc", "organik", "cair", "fermentasi", "hayati"],
+    "body": "Kandungan: bervariasi (N, P, K, mikroorganisme, hormon tumbuh alami). Fungsi: perbaikan struktur tanah, supplemen nutrisi, stimulasi mikroba. Aplikasi: 10-20 ml/liter air, semprot daun atau kocor akar setiap 7-14 hari. Bisa buat sendiri dari air cucian beras, EM4, gula, limbah dapur."
+  },
+  {
+    "id": "fertilizer-kompos",
+    "title": "Kompos / Pupuk Kandang",
+    "summary": "Pupuk organik padat untuk memperbaiki struktur tanah.",
+    "keywords": ["kompos", "pupuk kandang", "bokashi", "organik"],
+    "body": "Kandungan: 1-3% N, 0.5-2% P2O5, 0.5-2% K2O + bahan organik tinggi. Fungsi: memperbaiki struktur tanah, retensi air, sumber karbon mikroba. Dosis: 5-10 ton/ha sebelum olah tanah. Pastikan sudah matang (tidak panas, berbau tanah) sebelum aplikasi."
+  }
+]
