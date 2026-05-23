@@ -32,6 +32,11 @@ Dokumen ini melacak progres pengembangan aplikasi **SabiTani** beserta hal-hal k
 - **S-5 infra** (PR #8 merged) Infrastructure key Gemini: `Project.readSecret(name)` di build-logic (fallback local.properties → env), `:core:network` buildConfigField `GEMINI_API_KEY` + `GEMINI_MODEL`, `GeminiConfig` + `GeminiConfigModule` Hilt provider, `local.properties.example`, CI workflow inject secrets via env, README setup section.
 
 ### Phase 2 — Tania (foundation)
+- **PR3** RAG + system prompt + Room persistence:
+  - `ChatMessageEntity` + `ChatMessageDao` di `:core:database`, DB version bump 1→2, `MIGRATION_1_2` (additive, aman untuk user lama).
+  - `TaniaSystemPrompt` (singleton) — expert persona pertanian Indonesia + format jawaban (Gejala/Penyebab/Penanganan, Dosis/Cara/Catatan) + aturan referensi (gunakan blok `<referensi>` saat ada) + batas (tolak non-pertanian, no diagnosis medis).
+  - `ChatPromptBuilder` — augment user prompt dengan top-K hasil `SearchKnowledgeUseCase` dalam blok `<referensi>...</referensi>`, build `GenerateContentRequestDto` lengkap (systemInstruction + temperature 0.4 + maxOutputTokens 1024).
+  - `ChatRepositoryImpl` refactor: ganti `MutableStateFlow` → DAO observe, inject `ChatPromptBuilder` + `Clock`, history persist di Room, RAG transparent (use case + view model tidak berubah).
 - **PR2** `:feature:tania` module + Gemini Retrofit client + knowledge base seed JSON (penyakit, pupuk, pestisida, varietas) + chat skeleton:
   - DTOs: `GeminiContentDto`, `GeminiPartDto`, `GeminiInlineDataDto`, `GeminiGenerationConfigDto`, `GeminiSafetySettingDto`, `GenerateContentRequestDto`, `GenerateContentResponseDto` + `GeminiCandidateDto` + `GeminiUsageMetadataDto`
   - Network: `GeminiApi` (Retrofit `v1beta/models/{model}:generateContent`), `GeminiAuthInterceptor` (`x-goog-api-key` header), `GeminiClientFactory` (60s timeout + logging), `TaniaNetworkModule`

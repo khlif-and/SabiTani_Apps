@@ -9,6 +9,7 @@ android {
 
 dependencies {
     implementation(projects.core.network)
+    implementation(projects.core.database)
     implementation(projects.core.common)
     implementation(projects.core.ui)
     implementation(libs.kotlinx.datetime)
