@@ -1,0 +1,58 @@
+[
+  {
+    "id": "disease-blast-padi",
+    "title": "Blast Padi (Pyricularia oryzae)",
+    "summary": "Penyakit jamur menyerang daun, leher malai, dan bulir padi.",
+    "keywords": ["blast", "pyricularia", "padi", "leher patah", "neck blast", "bercak belah ketupat"],
+    "body": "Gejala: bercak belah ketupat di daun dengan tepi coklat dan tengah keabu-abuan; pada stadium malai menyebabkan leher patah dan bulir hampa. Penyebab: jamur Pyricularia oryzae, dipicu kelembaban tinggi + pupuk N berlebih. Penanganan: gunakan varietas tahan (Inpari 32, Inpari 42), kurangi N, semprot fungisida sistemik berbahan aktif trisiklazol atau isoprothiolan saat gejala awal."
+  },
+  {
+    "id": "disease-kresek",
+    "title": "Kresek / Hawar Daun Bakteri (Xanthomonas oryzae)",
+    "summary": "Penyakit bakteri yang menyebabkan daun padi mengering seperti terbakar.",
+    "keywords": ["kresek", "hawar daun", "bakteri", "xanthomonas", "padi", "daun kering"],
+    "body": "Gejala: garis kekuningan di tepi daun yang memanjang dan mengering. Pada serangan berat seluruh tanaman tampak terbakar. Penyebab: Xanthomonas oryzae pv. oryzae, menyebar lewat luka mekanik dan irigasi. Penanganan: pakai varietas tahan, kurangi pupuk N, jangan tergenang terus, semprot bakterisida tembaga (cupric hidroksida)."
+  },
+  {
+    "id": "disease-wereng-coklat",
+    "title": "Wereng Batang Coklat (Nilaparvata lugens)",
+    "summary": "Hama yang menghisap cairan batang padi sampai tanaman layu (hopperburn).",
+    "keywords": ["wereng", "wereng coklat", "nilaparvata", "padi", "hopperburn", "layu"],
+    "body": "Gejala: kelompok wereng di pangkal batang, tanaman menguning lalu kering seperti terbakar (hopperburn). Penyebab: nimfa & imago menghisap floem padi. Penanganan: monitoring rutin, varietas tahan (Inpari 13/33), insektisida buprofezin atau imidakloprid bergiliran untuk hindari resistensi."
+  },
+  {
+    "id": "disease-penggerek-batang",
+    "title": "Penggerek Batang Padi (Scirpophaga incertulas)",
+    "summary": "Larva ngengat menggerek batang padi sampai mati pucuk / beluk.",
+    "keywords": ["penggerek", "batang", "scirpophaga", "padi", "beluk", "sundep"],
+    "body": "Gejala fase vegetatif: pucuk mati (sundep). Fase generatif: malai putih hampa (beluk). Penyebab: larva ngengat memakan jaringan dalam batang. Penanganan: tanam serempak satu hamparan, monitor ngengat dengan light trap, insektisida butirat (karbofuran) atau penyemprotan klorantraniliprol saat ditemukan kelompok telur."
+  },
+  {
+    "id": "disease-hawar-daun-jagung",
+    "title": "Hawar Daun Jagung (Helminthosporium turcicum)",
+    "summary": "Bercak panjang abu-abu di daun jagung yang menurunkan fotosintesis.",
+    "keywords": ["hawar daun", "jagung", "helminthosporium", "bercak panjang"],
+    "body": "Gejala: bercak panjang berbentuk perahu, warna abu-abu kecoklatan, terutama di daun bawah dulu. Penyebab: jamur Helminthosporium turcicum, kelembaban tinggi. Penanganan: rotasi tanaman, varietas tahan, fungisida mankozeb atau azoxystrobin saat gejala awal."
+  },
+  {
+    "id": "disease-antraknosa-cabai",
+    "title": "Antraknosa Cabai (Colletotrichum capsici)",
+    "summary": "Busuk buah cabai dengan bercak hitam cekung.",
+    "keywords": ["antraknosa", "cabai", "colletotrichum", "patek", "busuk buah"],
+    "body": "Gejala: bercak hitam cekung di buah cabai, biji menghitam, buah rontok. Penyebab: jamur Colletotrichum, dipicu hujan + kelembaban tinggi. Penanganan: jarak tanam tidak terlalu rapat, drainase baik, fungisida mankozeb/klorotalonil setiap 7 hari saat musim hujan."
+  },
+  {
+    "id": "disease-layu-fusarium",
+    "title": "Layu Fusarium Tomat (Fusarium oxysporum)",
+    "summary": "Tanaman tomat layu walau tanah cukup air, akhirnya mati.",
+    "keywords": ["layu", "fusarium", "tomat", "vaskular", "menguning"],
+    "body": "Gejala: daun bawah menguning satu sisi, layu progresif, batang dipotong terlihat coklat di pembuluh. Penyebab: jamur tanah Fusarium oxysporum. Penanganan: rotasi tanaman (jangan tomat-tomat berturut-turut), varietas tahan, sterilisasi media, fungisida soil drench trichoderma sebagai agen hayati."
+  },
+  {
+    "id": "disease-karat-kedelai",
+    "title": "Karat Daun Kedelai (Phakopsora pachyrhizi)",
+    "summary": "Bercak karat coklat di daun kedelai menurunkan hasil signifikan.",
+    "keywords": ["karat", "kedelai", "phakopsora", "bercak coklat"],
+    "body": "Gejala: bercak kecil coklat kemerahan di bawah daun, daun rontok dini. Penyebab: jamur Phakopsora pachyrhizi. Penanganan: tanam serempak, fungisida triazol (tebukonazol/propikonazol) atau strobilurin saat gejala awal."
+  }
+]

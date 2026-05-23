@@ -28,8 +28,17 @@ Dokumen ini melacak progres pengembangan aplikasi **SabiTani** beserta hal-hal k
 ### Pre-beta hardening
 - **S-6** (PR #7 merged) `network_security_config.xml` (cleartextTrafficPermitted=false, system trust anchors) + `android:usesCleartextTraffic="false"` + reference di `AndroidManifest.xml`
 - **S-9** (PR #7 merged) Firebase Crashlytics conditional wiring (apply google-services + crashlytics plugins hanya kalau `app/google-services.json` ada) + `AnalyticsConsent` DataStore-backed (default OFF) + `CrashlyticsBridge` (Firebase availability guard) + `AnalyticsInitializer` (subscribe consent → `setCrashlyticsCollectionEnabled`) + toggle UI di SecuritySettings ("Analitik Anonim")
-- **S-4** (PR1a) `android:allowBackup="false"` + hapus reference backup_rules.xml + data_extraction_rules.xml dari manifest + delete file XML. Data portability di-handle via export feature atau cloud sync (Phase 4).
-- **S-5** (PR1a) Infrastructure key Gemini: `Project.readSecret(name)` di build-logic (fallback local.properties → env), `:core:network` buildConfigField `GEMINI_API_KEY` + `GEMINI_MODEL`, `GeminiConfig` + `GeminiConfigModule` Hilt provider, `local.properties.example`, CI workflow inject secrets via env, README setup section.
+- **S-4** (PR #8 merged) `android:allowBackup="false"` + hapus reference backup_rules.xml + data_extraction_rules.xml dari manifest + delete file XML. Data portability di-handle via export feature atau cloud sync (Phase 4).
+- **S-5 infra** (PR #8 merged) Infrastructure key Gemini: `Project.readSecret(name)` di build-logic (fallback local.properties → env), `:core:network` buildConfigField `GEMINI_API_KEY` + `GEMINI_MODEL`, `GeminiConfig` + `GeminiConfigModule` Hilt provider, `local.properties.example`, CI workflow inject secrets via env, README setup section.
+
+### Phase 2 — Tania (foundation)
+- **PR2** `:feature:tania` module + Gemini Retrofit client + knowledge base seed JSON (penyakit, pupuk, pestisida, varietas) + chat skeleton:
+  - DTOs: `GeminiContentDto`, `GeminiPartDto`, `GeminiInlineDataDto`, `GeminiGenerationConfigDto`, `GeminiSafetySettingDto`, `GenerateContentRequestDto`, `GenerateContentResponseDto` + `GeminiCandidateDto` + `GeminiUsageMetadataDto`
+  - Network: `GeminiApi` (Retrofit `v1beta/models/{model}:generateContent`), `GeminiAuthInterceptor` (`x-goog-api-key` header), `GeminiClientFactory` (60s timeout + logging), `TaniaNetworkModule`
+  - Knowledge: 4 JSON di assets (8 disease, 7 fertilizer, 6 pesticide, 6 variety entries Indonesia), `KnowledgeEntry` domain, `KnowledgeAssetLoader`, `KnowledgeRepository` + impl (mutex cache), `SearchKnowledgeUseCase` (token scoring keyword > title > content), `TaniaKnowledgeModule`
+  - Chat: `ChatMessage` (id + role + text + Instant), `ChatRole` (USER/ASSISTANT), `ChatRepository` + impl (MutableStateFlow + Gemini call, no RAG yet), use cases (Send/Observe/ClearHistory), `ChatViewModel` (Orbit MVI), `ChatContract` (State/Intent/Effect), `ChatScreen` + `ChatMessageList` + `ChatMessageBubble` + `ChatInputBar`, `ChatRoute`
+  - Wire: Replace `TaniaPlaceholderRoute` di MainShell dengan `ChatRoute`, INTERNET permission, delete `TaniaPlaceholderRoute` + `taniaPlaceholderScreen`
+  - `app/google-services.json` di-gitignored, root `build.gradle.kts` declare `google-services` + `firebase-crashlytics` plugins as `apply false` agar conditional apply di `:app` resolve classpath.
 
 ---
 

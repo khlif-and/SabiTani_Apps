@@ -63,6 +63,7 @@ dependencies {
     implementation(projects.feature.plot)
     implementation(projects.feature.cycle)
     implementation(projects.feature.lock)
+    implementation(projects.feature.tania)
     implementation(projects.core.model)
     implementation(projects.core.security)
 

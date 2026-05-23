@@ -22,3 +22,7 @@ local.properties
 
 # Module build outputs
 **/build/
+
+# Firebase config — provided via CI secret + decode step, jangan commit
+app/google-services.json
+

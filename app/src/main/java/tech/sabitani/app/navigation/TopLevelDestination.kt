@@ -16,6 +16,7 @@ import tech.sabitani.feature.lock.presentation.screen.SetupPinRoute
 import tech.sabitani.feature.plot.presentation.screen.FarmListRoute
 import tech.sabitani.feature.plot.presentation.screen.PlotDetailRoute
 import tech.sabitani.feature.plot.presentation.screen.PlotListRoute
+import tech.sabitani.feature.tania.presentation.screen.ChatRoute
 
 internal enum class TopLevelDestination(
     val label: String,
@@ -37,7 +38,7 @@ internal enum class TopLevelDestination(
                     destination.hasRoute<PlotDetailRoute>() ||
                     destination.hasRoute<CycleFormRoute>() ||
                     destination.hasRoute<CycleDetailRoute>()
-            TANIA -> destination.hasRoute<TaniaPlaceholderRoute>()
+            TANIA -> destination.hasRoute<ChatRoute>()
             PROFIL ->
                 destination.hasRoute<ProfileRoute>() ||
                     destination.hasRoute<SecuritySettingsRoute>() ||
