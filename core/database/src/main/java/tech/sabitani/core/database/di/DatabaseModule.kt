@@ -11,11 +11,13 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.datetime.Clock
 import net.zetetic.database.sqlcipher.SupportOpenHelperFactory
 import tech.sabitani.core.database.SabiTaniDatabase
+import tech.sabitani.core.database.dao.ChatMessageDao
 import tech.sabitani.core.database.dao.CropCycleDao
 import tech.sabitani.core.database.dao.FarmActivityDao
 import tech.sabitani.core.database.dao.FarmDao
 import tech.sabitani.core.database.dao.PlotDao
 import tech.sabitani.core.database.dao.TransactionDao
+import tech.sabitani.core.database.migration.SABITANI_DATABASE_MIGRATIONS
 import tech.sabitani.core.security.database.DatabaseKeyProvider
 import javax.inject.Singleton
 
@@ -39,6 +41,7 @@ internal object DatabaseModule {
                 klass = SabiTaniDatabase::class.java,
                 name = DATABASE_NAME,
             ).openHelperFactory(factory)
+            .addMigrations(*SABITANI_DATABASE_MIGRATIONS)
             .build()
     }
 
@@ -56,6 +59,9 @@ internal object DatabaseModule {
 
     @Provides
     fun providesTransactionDao(database: SabiTaniDatabase): TransactionDao = database.transactionDao()
+
+    @Provides
+    fun providesChatMessageDao(database: SabiTaniDatabase): ChatMessageDao = database.chatMessageDao()
 
     @Provides
     @Singleton

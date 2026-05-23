@@ -4,11 +4,13 @@ import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import tech.sabitani.core.database.converter.DateConverters
+import tech.sabitani.core.database.dao.ChatMessageDao
 import tech.sabitani.core.database.dao.CropCycleDao
 import tech.sabitani.core.database.dao.FarmActivityDao
 import tech.sabitani.core.database.dao.FarmDao
 import tech.sabitani.core.database.dao.PlotDao
 import tech.sabitani.core.database.dao.TransactionDao
+import tech.sabitani.core.database.entity.ChatMessageEntity
 import tech.sabitani.core.database.entity.CropCycleEntity
 import tech.sabitani.core.database.entity.FarmActivityEntity
 import tech.sabitani.core.database.entity.FarmEntity
@@ -22,8 +24,9 @@ import tech.sabitani.core.database.entity.TransactionEntity
         CropCycleEntity::class,
         FarmActivityEntity::class,
         TransactionEntity::class,
+        ChatMessageEntity::class,
     ],
-    version = 1,
+    version = 2,
     exportSchema = true,
 )
 @TypeConverters(DateConverters::class)
@@ -37,4 +40,6 @@ abstract class SabiTaniDatabase : RoomDatabase() {
     abstract fun farmActivityDao(): FarmActivityDao
 
     abstract fun transactionDao(): TransactionDao
+
+    abstract fun chatMessageDao(): ChatMessageDao
 }

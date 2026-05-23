@@ -2,16 +2,16 @@ package tech.sabitani.feature.tania.data.repository
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import kotlinx.datetime.Clock
+import tech.sabitani.core.database.dao.ChatMessageDao
 import tech.sabitani.core.network.gemini.GeminiConfig
 import tech.sabitani.feature.tania.data.mapper.extractText
-import tech.sabitani.feature.tania.data.mapper.toGeminiContent
+import tech.sabitani.feature.tania.data.mapper.toDomain
+import tech.sabitani.feature.tania.data.mapper.toEntity
+import tech.sabitani.feature.tania.data.remote.ChatPromptBuilder
 import tech.sabitani.feature.tania.data.remote.api.GeminiApi
-import tech.sabitani.feature.tania.data.remote.dto.GenerateContentRequestDto
 import tech.sabitani.feature.tania.domain.model.ChatMessage
 import tech.sabitani.feature.tania.domain.model.ChatRole
 import tech.sabitani.feature.tania.domain.repository.ChatRepository
@@ -25,40 +25,37 @@ internal class ChatRepositoryImpl
     constructor(
         private val api: GeminiApi,
         private val config: GeminiConfig,
+        private val dao: ChatMessageDao,
+        private val promptBuilder: ChatPromptBuilder,
+        private val clock: Clock,
     ) : ChatRepository {
-        private val state = MutableStateFlow<List<ChatMessage>>(emptyList())
-
-        override val messages: Flow<List<ChatMessage>> = state.asStateFlow()
+        override val messages: Flow<List<ChatMessage>> =
+            dao.observeAll().map { entities -> entities.map { it.toDomain() } }
 
         override suspend fun send(prompt: String): Result<Unit> {
             if (!config.isConfigured) {
                 return Result.failure(IllegalStateException("Gemini API key belum dikonfigurasi."))
             }
-            appendUser(prompt)
-            return runCatching { withContext(Dispatchers.IO) { callGemini() } }
-                .onSuccess(::appendAssistant)
-                .map { }
+            val historySnapshot = dao.getAll().map { it.toDomain() }
+            val userMessage = newMessage(role = ChatRole.USER, text = prompt)
+            dao.insert(userMessage.toEntity())
+
+            return runCatching { withContext(Dispatchers.IO) { generate(prompt, historySnapshot) } }
+                .onSuccess { reply ->
+                    dao.insert(newMessage(role = ChatRole.ASSISTANT, text = reply).toEntity())
+                }.map { }
         }
 
         override suspend fun clear() {
-            state.value = emptyList()
+            dao.deleteAll()
         }
 
-        private fun appendUser(prompt: String) {
-            state.update { current -> current + newMessage(role = ChatRole.USER, text = prompt) }
-        }
-
-        private fun appendAssistant(text: String) {
-            state.update { current -> current + newMessage(role = ChatRole.ASSISTANT, text = text) }
-        }
-
-        private suspend fun callGemini(): String {
-            val history = state.value.map { it.toGeminiContent() }
-            val response =
-                api.generateContent(
-                    model = config.model,
-                    request = GenerateContentRequestDto(contents = history),
-                )
+        private suspend fun generate(
+            prompt: String,
+            history: List<ChatMessage>,
+        ): String {
+            val request = promptBuilder.build(userPrompt = prompt, history = history)
+            val response = api.generateContent(model = config.model, request = request)
             return response.candidates
                 .firstOrNull()
                 ?.content
@@ -74,6 +71,6 @@ internal class ChatRepositoryImpl
                 id = UUID.randomUUID().toString(),
                 role = role,
                 text = text,
-                createdAt = Clock.System.now(),
+                createdAt = clock.now(),
             )
     }
