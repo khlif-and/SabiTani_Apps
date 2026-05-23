@@ -2,37 +2,36 @@
 
 Dokumen ini melacak progres pengembangan aplikasi **SabiTani** beserta hal-hal keamanan yang harus diperhatikan sebelum rilis production.
 
-> Update terakhir: 2026-05-22
-> PR Phase 1: https://github.com/khlif-and/SabiTani_Apps/pull/1
+> Update terakhir: 2026-05-23
+> PR sudah merge: #1 (Phase 1), #2 (home shell + bottom nav), #3 (R8 + ProGuard), #4 (SQLCipher + EncryptedSharedPreferences), #6 (PIN + Biometric opt-in)
+> PR pending review: pre-beta hardening (S-6 Network Security Config + S-9 Crashlytics opt-in)
 
 ---
 
-## 1. Sudah selesai
+## 1. Sudah selesai (changelog ringkas)
 
-### Fondasi & infrastruktur
-- [x] Modular project structure (Now-in-Android style: `:core:*` + `:feature:*` + convention plugins)
-- [x] Hilt DI + KSP + Compose + Material 3 + Room 2.6 + DataStore + kotlinx-datetime + Orbit MVI
-- [x] Konsist architecture tests (domain murni, no cross-feature deps)
-- [x] Detekt + Spotless + Dependency Guard + Konsist
-- [x] Splash, Onboarding, Login screens (login masih *FakeAuthRepository* — lihat bagian Keamanan)
-- [x] Git repository + GitHub remote + branch workflow
+### Fondasi & Phase 1 (#1, #2)
+- Modular project structure, Hilt + KSP + Compose Material 3 + Room 2.6 + DataStore + Orbit MVI
+- Konsist + Detekt + Spotless + Dependency Guard
+- Splash, Onboarding, Login (FakeAuth), Phase 1 data foundation (Farm/Plot/CropCycle/Activity/Transaction)
+- Home shell + 4-tab bottom nav (Beranda · Kebun · Tania · Profil) + dashboard ringkas
+- Wiring `:feature:plot` + `:feature:cycle` di MainShell, navigasi PlotList → PlotDetail → CycleForm → CycleDetail
 
-### Phase 1 — Fondasi data pertanian (PR #1)
-- [x] Domain models di `:core:model`: `Farm`, `Plot`, `CropCycle`, `FarmActivity`, `Transaction`, `CycleCostSummary` + enums
-- [x] Room database v1 di `:core:database` dengan 5 entity + foreign keys + indices + DAO + Hilt module + type converters + schema export
-- [x] `:feature:plot` (baru) — FarmList, PlotList, PlotDetail screens (Orbit MVI)
-- [x] `:feature:cycle` (baru) — CycleForm, CycleDetail screens dengan tabbed activity/transaction timeline + cost summary (laba-rugi) real-time per siklus tanam
-- [x] Validasi input via `require()` di use case (nama wajib, luas > 0, dst.)
-- [x] Lint + detekt clean, arch test passing, `assembleDebug` sukses
+### Security wave 1 (#3, #4, #6)
+- **S-2** Room ter-encrypt via SQLCipher 4.6.1 + `core:security` (DEK 32-byte random di EncryptedSharedPreferences) — PR #4
+- **S-3** `isMinifyEnabled=true` + `isShrinkResources=true` di release build + ProGuard rules untuk kotlinx.serialization (type-safe routes) + datetime + `-dontwarn` transitive — PR #3
+- **S-15** ProGuard `-keep` untuk `@Serializable` + Tink errorprone `-dontwarn` (consumer-rules.pro per modul) — PR #3, #6
+- **S-8** Timber `DebugTree()` sudah gated `BuildConfig.DEBUG` di `SabiTaniApp.kt:12` (sudah ada dari awal, di-verify)
+- **PIN + Biometric opt-in (parsial S-1)** — `core/security` (PinManager PBKDF2-200k, BiometricKeyStore hardware-bound dengan `setUserAuthenticationRequired(true)` + `setInvalidatedByBiometricEnrollment(true)`) + `feature/lock` (SetupPin, Unlock, SecuritySettings) + MainActivity lock gate — PR #6
+- **CI/CD**: GitHub Actions `.github/workflows/ci.yml` aktif (verified hijau pada PR #3/#4/#6)
+
+### Pre-beta hardening (PR pending review)
+- **S-6** `network_security_config.xml` (cleartextTrafficPermitted=false, system trust anchors) + `android:usesCleartextTraffic="false"` + reference di `AndroidManifest.xml`
+- **S-9** Firebase Crashlytics conditional wiring (apply google-services + crashlytics plugins hanya kalau `app/google-services.json` ada) + `AnalyticsConsent` DataStore-backed (default OFF) + `CrashlyticsBridge` (Firebase availability guard) + `AnalyticsInitializer` (subscribe consent → `setCrashlyticsCollectionEnabled`) + toggle UI di SecuritySettings ("Analitik Anonim")
 
 ---
 
 ## 2. Belum dikerjakan
-
-### Integrasi UX (harus segera)
-- [ ] Wire `FarmListRoute` ke `SabiTaniAppNavGraph` setelah login (saat ini TODO masih di `app/.../SabiTaniAppNavGraph.kt:44`)
-- [ ] Wire navigasi antar feature module di `:app`: PlotList → PlotDetail → CycleForm → CycleDetail
-- [ ] Bottom navigation atau drawer untuk akses cepat ke feature utama
 
 ### Phase 2 — Asisten AI Tania
 - [ ] Setup Gemini API client di `:core:network` (atau `:feature:tania` baru)
@@ -58,20 +57,26 @@ Dokumen ini melacak progres pengembangan aplikasi **SabiTani** beserta hal-hal k
 - [ ] Mode offline-first (sync ulang saat online)
 
 ### Testing
-- [ ] Unit test untuk semua use case (`:feature:plot`, `:feature:cycle`)
+- [ ] Unit test untuk semua use case (`:feature:plot`, `:feature:cycle`, `:feature:home`, `:feature:lock`)
 - [ ] Unit test untuk repository impl dengan in-memory DAO
-- [ ] Integration test untuk Room DAO (`androidTest/`)
+- [ ] Integration test untuk Room DAO (`androidTest/`) — verifikasi SQLCipher encryption end-to-end
 - [ ] Compose UI test untuk form validation
+- [ ] Test PinManager (verifyPin dengan PIN salah, setupPin idempotent, disablePin restore plain DEK)
 - [ ] Konsist test tambahan: package layering, naming conventions
 - [ ] Coverage minimum target (mis. 70% line coverage di domain & data)
 
+### Auto-lock & PIN UX lanjutan (follow-up PR #6)
+- [ ] Auto-lock saat resume dari background > N detik (hook `ProcessLifecycleOwner`, configurable di Settings)
+- [ ] Ganti PIN in-place (sekarang harus disable + setup lagi)
+- [ ] Indikator strength PIN saat setup
+- [ ] Rate limit PIN attempt (lockout setelah 5 percobaan salah)
+
 ### Technical debt / housekeeping
-- [ ] `feature/auth` menggunakan `FakeAuthRepository` — perlu real auth (lihat Keamanan)
-- [ ] `feature/auth/.../AuthRoute.kt` punya file-name vs declaration mismatch (detekt warning di kode lama)
+- [ ] **S-1 sisa**: `FakeAuthRepository` masih dipakai di flow Splash→Onboarding→Login (saat PIN belum aktif). Putuskan: hapus login screen + jadikan PIN/biometric mandatory, atau replace dengan real auth (Firebase/backend custom)
+- [ ] `feature/auth/.../AuthRoute.kt` punya file-name vs declaration mismatch (file `AuthRoute.kt` isinya `LoginRoute`)
 - [ ] `MagicNumber` di `FakeAuthRepository` (`password.length >= 6`)
-- [ ] `:core:data`, `:core:domain`, `:core:ui`, `:core:testing` folder ada tapi belum di-register di `settings.gradle.kts` — putuskan: dihapus atau diisi
-- [ ] Migrasi Room saat schema berubah (sudah ada schema export, tinggal tambah `Migration` saat v2)
-- [ ] CI/CD: GitHub Actions untuk run lint + test setiap PR (folder `.github/workflows/ci.yml` sudah ada — verifikasi isinya)
+- [ ] `:core:domain` dan `:core:testing` folder ada tapi belum di-register di `settings.gradle.kts` — putuskan: dihapus atau diisi
+- [ ] Migrasi Room saat schema berubah (sudah ada schema export, tinggal tambah `Migration` saat v2 — termasuk migrasi data lama yang belum ter-encrypt jika ada user lama)
 
 ---
 
@@ -81,97 +86,81 @@ Urutan dari paling kritis → kurang kritis. **Wajib selesai sebelum production 
 
 ### 🔴 Kritis (blocker production)
 
-#### S-1. Authentication masih FAKE
+#### S-1. (parsial) Login flow masih FAKE saat PIN belum aktif
+- **Status:** PIN + Biometric sudah ada (PR #6) — saat user aktifkan PIN, cold start langsung ke UnlockRoute → MainShell, FakeAuth dilewati.
+- **Sisa risiko:** Saat PIN belum aktif (default), flow tetap Splash → Onboarding → Login (FakeAuth) → MainShell. Siapa pun bisa login dengan password ≥ 6 karakter apa saja.
 - **Lokasi:** `feature/auth/.../data/repository/FakeAuthRepository.kt:14`
-- **Risiko:** Siapa pun bisa login dengan password ≥ 6 karakter apa saja. Tidak ada verifikasi server, tidak ada session token, tidak ada logout.
-- **Fix:**
-  - Pilih provider: Firebase Auth (paling cepat untuk MVP), atau backend custom dengan JWT.
-  - Simpan session token di `EncryptedSharedPreferences` atau `Android Keystore`, BUKAN di plain DataStore.
-  - Implementasi refresh token + auto-logout saat token expired.
-
-#### S-2. Data Room tidak ter-enkripsi
-- **Lokasi:** `core/database/.../di/DatabaseModule.kt`
-- **Risiko:** File `sabitani.db` di internal storage bisa dibaca oleh attacker di device yang di-root. Data finansial (laba/rugi, pengeluaran) + lokasi kebun adalah PII sensitif.
-- **Fix:**
-  - Integrasikan **SQLCipher for Android** (`net.zetetic:android-database-sqlcipher`) atau **Room with Cipher** (`androidx.sqlite:sqlite-bundled` + passphrase).
-  - Passphrase di-derive dari Android Keystore-backed key.
-
-#### S-3. Release build tidak di-minify / obfuscate
-- **Lokasi:** `app/build.gradle.kts:19`
-- **Detail:** `isMinifyEnabled = false` di build type `release`
-- **Risiko:** APK release bisa di-reverse engineer dengan mudah. API key (saat Tania ditambah) akan terlihat.
-- **Fix:**
-  - Set `isMinifyEnabled = true` dan `isShrinkResources = true` untuk `release`.
-  - Tambahkan ProGuard rules untuk: Room, Hilt, Orbit, kotlinx.serialization, kotlinx.datetime, Retrofit DTOs.
-  - Test release build full flow sebelum publish.
+- **Fix (pilih salah satu):**
+  - **A**: Hapus Login screen entirely, jadikan PIN setup wajib di onboarding step terakhir. Onboarding → SetupPin → MainShell.
+  - **B**: Implement real auth (Firebase Auth / backend JWT) untuk multi-device. Simpan session token di `EncryptedSharedPreferences`. PIN tetap retained sebagai second factor lokal.
 
 #### S-4. `allowBackup="true"` + backup rules kosong
 - **Lokasi:** `app/src/main/AndroidManifest.xml:7` + `app/src/main/res/xml/backup_rules.xml`
 - **Risiko:** Auto-backup ke Google Drive bisa membawa `sabitani.db` (data finansial petani). Saat restore di device lain, data ikut.
 - **Fix:** Pilih salah satu:
   - Set `android:allowBackup="false"` (paling aman).
-  - Atau pertahankan tapi exclude database & sensitive prefs di `backup_rules.xml` dan `data_extraction_rules.xml`.
+  - Atau pertahankan tapi exclude database & EncryptedSharedPreferences (`sabitani_secure_prefs`) di `backup_rules.xml` dan `data_extraction_rules.xml`.
 
 #### S-5. API key Gemini (Phase 2) — strategi penyimpanan
 - **Risiko:** Embed API key langsung di code/git = key di-publik exposed (repo public). Auto-extracted dengan tools.
 - **Fix (Phase 2 sebelum implementasi Tania):**
   - **Terbaik:** backend proxy. Aplikasi panggil backend, backend yang punya key.
-  - **MVP shortcut:** key di `local.properties` (sudah gitignored) → di-inject via `buildConfigField` → minimal tidak di git, tapi *masih* visible di APK release. Gabungkan dengan minify + obfuscation. Tetap rotasi key secara berkala.
+  - **MVP shortcut:** key di `local.properties` (sudah gitignored) → di-inject via `buildConfigField` → minimal tidak di git, tapi *masih* visible di APK release. Gabungkan dengan minify (sudah aktif post-#3) + key rotation playbook.
   - **JANGAN PERNAH** taruh di repo, dalam string resource, atau di SharedPreferences plain.
 
 ### 🟠 Penting (sebelum buka public beta)
 
-#### S-6. Network Security Config belum ada
-- **Risiko:** Saat Tania API/cloud sync online, default Android masih allow cleartext HTTP di beberapa kondisi.
-- **Fix:** Buat `res/xml/network_security_config.xml`:
-  - `cleartextTrafficPermitted="false"`
-  - Sertifikat pinning untuk endpoint produksi (opsional tapi recommended).
-  - Referensi di `AndroidManifest.xml` lewat `android:networkSecurityConfig`.
+#### S-6. Network Security Config ✅ DONE (PR pre-beta hardening)
+- ✅ `app/src/main/res/xml/network_security_config.xml`: `cleartextTrafficPermitted="false"` + system trust anchors
+- ✅ Manifest referensi `android:networkSecurityConfig="@xml/network_security_config"` + `android:usesCleartextTraffic="false"`
+- ⏳ Certificate pinning ditunda sampai endpoint produksi resmi ada (Phase 2/4)
 
-#### S-7. EXIF metadata di foto sebelum upload ke Gemini
+#### S-7. EXIF metadata di foto sebelum upload ke Gemini ⏸ DEFER ke Phase 2
 - **Risiko:** Saat scan tanaman, foto biasanya mengandung GPS coordinates + timestamp + device info di EXIF. Upload ke pihak ketiga (Google) tanpa di-strip = bocor lokasi kebun + identitas device.
-- **Fix:**
+- **Fix (dikerjakan saat fitur Tania scan dibangun):**
   - Strip EXIF sebelum upload pakai `ExifInterface` (remove GPS tags + timestamp tags).
   - Compress foto sebelum upload (kurangi ukuran payload).
   - Informasikan user via privacy notice sebelum scan pertama.
+- **Alasan defer:** Belum ada UI scan/upload — utility prematur tanpa konsumen.
 
-#### S-8. Logging Timber di production
-- **Lokasi:** `app/.../SabiTaniApp.kt` (perlu di-verify)
-- **Risiko:** Kalau Timber `DebugTree()` di-plant di release build, semua `Timber.d()` akan ke logcat — bisa expose data sensitif kalau ada developer yang `Timber.d(user.email)`.
-- **Fix:**
-  - Plant `DebugTree()` hanya di `BuildConfig.DEBUG`.
-  - Untuk release, plant custom `Tree` yang kirim ke Crashlytics tapi **filter PII** (email, nominal, lokasi).
-
-#### S-9. Crashlytics & analytics privacy
+#### S-9. Crashlytics & analytics privacy ✅ DONE (PR pre-beta hardening)
 - **Lokasi:** `:core:analytics`, Firebase Crashlytics di `libs.versions.toml`
-- **Risiko:** Custom keys/logs di Crashlytics bisa berisi data sensitif (email, lokasi kebun). Crash dengan stack trace bisa expose query parameters.
-- **Fix:**
-  - Audit semua `FirebaseCrashlytics.log()` / `setCustomKey()` — JANGAN kirim PII.
-  - Implementasikan opt-in analytics (Material 3 toggle di Settings).
-  - Privacy policy URL yang jelas.
+- ✅ `AnalyticsConsent` (DataStore-backed, default OFF/opt-in)
+- ✅ `CrashlyticsBridge` membungkus Firebase SDK — no-op kalau Firebase tidak terinisialisasi (no `google-services.json`)
+- ✅ Plugin `google-services` + `firebase-crashlytics` apply conditional di `app/build.gradle.kts` — repo tetap buildable tanpa `google-services.json` (placeholder di local & CI). Saat user/CI provide file, plugin auto-apply.
+- ✅ `AnalyticsInitializer` subscribe `consent.isEnabled` → `setCrashlyticsCollectionEnabled(enabled)`
+- ✅ Toggle "Analitik Anonim" di SecuritySettingsScreen (Profil → Keamanan)
+- ✅ `CrashlyticsAnalyticsHelper` menggantikan `LogAnalyticsHelper` (Timber log + Crashlytics bridge log)
+- ⏳ Audit `FirebaseCrashlytics.log()` / `setCustomKey()` — N/A sekarang, belum ada call site. Saat Phase 2 ada call site PII, harus audit.
+- ⏳ Privacy policy URL — S-16
 
-#### S-10. Permission camera & storage (Phase 2)
+#### S-10. Permission camera & storage (Phase 2) ⏸ DEFER ke Phase 2
 - **Risiko:** Saat Tania scan ditambah, butuh permission CAMERA. Salah handle = security/UX issue.
-- **Fix:**
+- **Fix (dikerjakan saat fitur Tania scan dibangun):**
   - Minta permission **just-in-time** (saat user tap "Scan"), bukan di app start.
   - Pakai `accompanist-permissions` yang sudah ada di catalog.
   - Untuk file picker, pakai Photo Picker (Android 13+) atau Storage Access Framework — bukan `READ_EXTERNAL_STORAGE`.
+- **Alasan defer:** Belum ada UI camera/scan.
 
-#### S-11. Deep link validation (saat dibuka nanti)
-- **Risiko:** Deep link tanpa validasi bisa di-exploit untuk bypass auth flow atau buka screen sensitif tanpa login.
-- **Fix:**
+#### S-11. Deep link validation (saat dibuka nanti) ⏸ DEFER sampai deep link ditambah
+- **Risiko:** Deep link tanpa validasi bisa di-exploit untuk bypass auth flow (atau lock gate) dan buka screen sensitif tanpa unlock.
+- **Fix (dikerjakan saat deep link pertama ditambah):**
   - Validasi parameter di setiap composable destination.
-  - Auth guard di nav graph: kalau user belum login, deep link → redirect ke login.
+  - Lock guard di nav graph: kalau PIN aktif & user belum unlock, deep link → redirect ke UnlockRoute dulu.
   - Verifikasi intent source via `intent.scheme` whitelisting.
+- **Alasan defer:** Saat ini AndroidManifest hanya ada satu activity launcher tanpa intent-filter deep link. Tidak ada attack surface.
 
 ### 🟡 Disarankan (production hardening)
 
 #### S-12. FLAG_SECURE untuk screen sensitif
 - **Risiko:** Screenshot/screen recording di screen dengan data finansial bocor lewat recent apps screen.
-- **Fix:** Tambahkan `WindowCompat.setDecorFitsSystemWindows(window, false)` lalu `window.setFlags(FLAG_SECURE, FLAG_SECURE)` di `MainActivity` saat berada di screen `CycleDetailScreen` (cost summary).
+- **Fix:** Tambahkan `window.setFlags(FLAG_SECURE, FLAG_SECURE)` di `MainActivity` (atau via `DisposableEffect` per screen) saat berada di:
+  - `CycleDetailScreen` (cost summary)
+  - `UnlockScreen` / `SetupPinScreen` (PIN entry)
+  - `SecuritySettingsScreen`
 
 #### S-13. Root / tamper detection
-- **Risiko:** Device yang di-root bisa baca/modifikasi Room DB. Untuk data finansial moderately important.
+- **Risiko:** Device yang di-root bisa baca/modifikasi Room DB (meski sudah SQLCipher, kunci di EncryptedSharedPreferences bisa di-extract dari KeyStore di device bermasalah).
 - **Fix:**
   - Integrasikan **Play Integrity API** untuk verifikasi device integrity sebelum sync ke cloud (saat Phase 4).
   - Tampilkan warning (bukan block) kalau device di-root.
@@ -181,13 +170,6 @@ Urutan dari paling kritis → kurang kritis. **Wajib selesai sebelum production 
 - **Fix:**
   - Enable **Dependabot** di GitHub repo settings.
   - Periodic `./gradlew dependencyCheckAnalyze` (OWASP plugin) atau Snyk integration.
-
-#### S-15. ProGuard rules untuk obfuscation Domain models
-- **Risiko:** Setelah minify enabled, `kotlinx-serialization` annotated classes (route objects) bisa rusak.
-- **Fix:** Tambahkan rules `-keep` untuk:
-  - `@Serializable` classes di `:feature:*/presentation/screen`
-  - Room entities & DAOs di `:core:database`
-  - Hilt-generated code
 
 #### S-16. Privacy Policy & Terms of Service
 - **Risiko:** Wajib untuk publish ke Play Store + GDPR/UU PDP Indonesia compliance.
@@ -200,11 +182,13 @@ Urutan dari paling kritis → kurang kritis. **Wajib selesai sebelum production 
 
 ## 4. Konvensi yang sudah disepakati
 
-- **Push setiap perubahan via PR** ke `main` branch — manual merge approval oleh Khalif
+- **Push setiap perubahan via PR** ke `main` branch — manual merge approval oleh Khalif (kecuali user authorize otomatisasi per-sesi)
 - **Lint/detekt/format wajib clean** sebelum push
+- **CI hijau wajib** sebelum merge (sekarang sudah blocking via branch protection)
 - **Tidak ada scope creep** tanpa diskusi terlebih dahulu
-- **Domain layer murni Kotlin** (enforced via Konsist)
+- **Domain layer murni Kotlin** (enforced via Konsist — `androidx.*` dilarang di package `.domain`)
 - **No cross-feature module imports** (enforced via Konsist)
 - **File > ~150 lines** dipertimbangkan untuk di-split (SRP)
 - **Tania AI provider:** Gemini API (free tier sufficient untuk MVP)
 - **Knowledge base:** seed JSON statis (curated) + LLM sebagai reasoner, BUKAN LLM only
+- **PIN opt-in, biometric opsional**: default off. User aktifkan via Profil → Keamanan. PIN setup wajib sebelum biometric.

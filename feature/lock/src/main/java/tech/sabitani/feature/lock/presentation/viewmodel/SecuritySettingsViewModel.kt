@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import org.orbitmvi.orbit.ContainerHost
 import org.orbitmvi.orbit.viewmodel.container
+import tech.sabitani.core.analytics.consent.AnalyticsConsent
 import tech.sabitani.core.security.biometric.BiometricPromptText
 import tech.sabitani.feature.lock.domain.usecase.DisableBiometricUseCase
 import tech.sabitani.feature.lock.domain.usecase.DisablePinUseCase
@@ -24,6 +25,7 @@ class SecuritySettingsViewModel
         private val disablePinUseCase: DisablePinUseCase,
         private val enableBiometricUseCase: EnableBiometricUseCase,
         private val disableBiometricUseCase: DisableBiometricUseCase,
+        private val analyticsConsent: AnalyticsConsent,
     ) : ViewModel(),
         ContainerHost<SecuritySettingsState, SecuritySettingsEffect> {
         override val container =
@@ -43,17 +45,21 @@ class SecuritySettingsViewModel
                 SecuritySettingsIntent.DisablePinConfirmed -> handleDisablePin()
                 is SecuritySettingsIntent.BiometricToggled ->
                     handleBiometricToggle(enabled = intent.enabled, activity = activity)
+                is SecuritySettingsIntent.AnalyticsConsentToggled ->
+                    handleAnalyticsToggle(enabled = intent.enabled)
             }
         }
 
         fun refreshStatus() =
             intent {
                 val status = observeLockStatusUseCase()
+                val analyticsEnabled = analyticsConsent.isEnabledNow()
                 reduce {
                     state.copy(
                         isPinEnabled = status.isPinEnabled,
                         isBiometricEnabled = status.isBiometricEnabled,
                         isBiometricAvailable = status.isBiometricAvailable,
+                        isAnalyticsEnabled = analyticsEnabled,
                     )
                 }
             }
@@ -131,6 +137,19 @@ class SecuritySettingsViewModel
                 postSideEffect(SecuritySettingsEffect.ShowMessage("Biometrik dimatikan"))
             }
         }
+
+        private fun handleAnalyticsToggle(enabled: Boolean) =
+            intent {
+                analyticsConsent.setEnabled(enabled)
+                reduce { state.copy(isAnalyticsEnabled = enabled) }
+                val message =
+                    if (enabled) {
+                        "Analitik anonim diaktifkan"
+                    } else {
+                        "Analitik anonim dimatikan"
+                    }
+                postSideEffect(SecuritySettingsEffect.ShowMessage(message))
+            }
 
         private companion object {
             const val MAX_PIN_LENGTH = 8

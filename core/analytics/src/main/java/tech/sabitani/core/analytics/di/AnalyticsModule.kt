@@ -5,7 +5,9 @@ import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import tech.sabitani.core.analytics.AnalyticsHelper
-import tech.sabitani.core.analytics.LogAnalyticsHelper
+import tech.sabitani.core.analytics.CrashlyticsAnalyticsHelper
+import tech.sabitani.core.analytics.consent.AnalyticsConsent
+import tech.sabitani.core.analytics.consent.DataStoreAnalyticsConsent
 import javax.inject.Singleton
 
 @Module
@@ -13,5 +15,9 @@ import javax.inject.Singleton
 internal abstract class AnalyticsModule {
     @Binds
     @Singleton
-    abstract fun bindsAnalyticsHelper(impl: LogAnalyticsHelper): AnalyticsHelper
+    abstract fun bindsAnalyticsHelper(impl: CrashlyticsAnalyticsHelper): AnalyticsHelper
+
+    @Binds
+    @Singleton
+    abstract fun bindsAnalyticsConsent(impl: DataStoreAnalyticsConsent): AnalyticsConsent
 }

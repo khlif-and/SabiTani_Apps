@@ -4,6 +4,7 @@ data class SecuritySettingsState(
     val isPinEnabled: Boolean = false,
     val isBiometricEnabled: Boolean = false,
     val isBiometricAvailable: Boolean = false,
+    val isAnalyticsEnabled: Boolean = false,
     val disablePinInput: String = "",
     val showDisableDialog: Boolean = false,
     val isProcessing: Boolean = false,
@@ -24,6 +25,10 @@ sealed interface SecuritySettingsIntent {
     data object DisablePinConfirmed : SecuritySettingsIntent
 
     data class BiometricToggled(
+        val enabled: Boolean,
+    ) : SecuritySettingsIntent
+
+    data class AnalyticsConsentToggled(
         val enabled: Boolean,
     ) : SecuritySettingsIntent
 }
