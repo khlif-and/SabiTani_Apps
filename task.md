@@ -25,9 +25,11 @@ Dokumen ini melacak progres pengembangan aplikasi **SabiTani** beserta hal-hal k
 - **PIN + Biometric opt-in (parsial S-1)** — `core/security` (PinManager PBKDF2-200k, BiometricKeyStore hardware-bound dengan `setUserAuthenticationRequired(true)` + `setInvalidatedByBiometricEnrollment(true)`) + `feature/lock` (SetupPin, Unlock, SecuritySettings) + MainActivity lock gate — PR #6
 - **CI/CD**: GitHub Actions `.github/workflows/ci.yml` aktif (verified hijau pada PR #3/#4/#6)
 
-### Pre-beta hardening (PR pending review)
-- **S-6** `network_security_config.xml` (cleartextTrafficPermitted=false, system trust anchors) + `android:usesCleartextTraffic="false"` + reference di `AndroidManifest.xml`
-- **S-9** Firebase Crashlytics conditional wiring (apply google-services + crashlytics plugins hanya kalau `app/google-services.json` ada) + `AnalyticsConsent` DataStore-backed (default OFF) + `CrashlyticsBridge` (Firebase availability guard) + `AnalyticsInitializer` (subscribe consent → `setCrashlyticsCollectionEnabled`) + toggle UI di SecuritySettings ("Analitik Anonim")
+### Pre-beta hardening
+- **S-6** (PR #7 merged) `network_security_config.xml` (cleartextTrafficPermitted=false, system trust anchors) + `android:usesCleartextTraffic="false"` + reference di `AndroidManifest.xml`
+- **S-9** (PR #7 merged) Firebase Crashlytics conditional wiring (apply google-services + crashlytics plugins hanya kalau `app/google-services.json` ada) + `AnalyticsConsent` DataStore-backed (default OFF) + `CrashlyticsBridge` (Firebase availability guard) + `AnalyticsInitializer` (subscribe consent → `setCrashlyticsCollectionEnabled`) + toggle UI di SecuritySettings ("Analitik Anonim")
+- **S-4** (PR1a) `android:allowBackup="false"` + hapus reference backup_rules.xml + data_extraction_rules.xml dari manifest + delete file XML. Data portability di-handle via export feature atau cloud sync (Phase 4).
+- **S-5** (PR1a) Infrastructure key Gemini: `Project.readSecret(name)` di build-logic (fallback local.properties → env), `:core:network` buildConfigField `GEMINI_API_KEY` + `GEMINI_MODEL`, `GeminiConfig` + `GeminiConfigModule` Hilt provider, `local.properties.example`, CI workflow inject secrets via env, README setup section.
 
 ---
 
@@ -94,19 +96,18 @@ Urutan dari paling kritis → kurang kritis. **Wajib selesai sebelum production 
   - **A**: Hapus Login screen entirely, jadikan PIN setup wajib di onboarding step terakhir. Onboarding → SetupPin → MainShell.
   - **B**: Implement real auth (Firebase Auth / backend JWT) untuk multi-device. Simpan session token di `EncryptedSharedPreferences`. PIN tetap retained sebagai second factor lokal.
 
-#### S-4. `allowBackup="true"` + backup rules kosong
-- **Lokasi:** `app/src/main/AndroidManifest.xml:7` + `app/src/main/res/xml/backup_rules.xml`
-- **Risiko:** Auto-backup ke Google Drive bisa membawa `sabitani.db` (data finansial petani). Saat restore di device lain, data ikut.
-- **Fix:** Pilih salah satu:
-  - Set `android:allowBackup="false"` (paling aman).
-  - Atau pertahankan tapi exclude database & EncryptedSharedPreferences (`sabitani_secure_prefs`) di `backup_rules.xml` dan `data_extraction_rules.xml`.
+#### S-4. `allowBackup` ✅ DONE (PR1a)
+- ✅ `android:allowBackup="false"` di AndroidManifest.xml
+- ✅ Hapus `android:dataExtractionRules` + `android:fullBackupContent` reference + delete file XML (sudah dead reference)
+- ⏳ Data portability untuk legit user → export feature (PR future) atau cloud sync (Phase 4)
 
-#### S-5. API key Gemini (Phase 2) — strategi penyimpanan
-- **Risiko:** Embed API key langsung di code/git = key di-publik exposed (repo public). Auto-extracted dengan tools.
-- **Fix (Phase 2 sebelum implementasi Tania):**
-  - **Terbaik:** backend proxy. Aplikasi panggil backend, backend yang punya key.
-  - **MVP shortcut:** key di `local.properties` (sudah gitignored) → di-inject via `buildConfigField` → minimal tidak di git, tapi *masih* visible di APK release. Gabungkan dengan minify (sudah aktif post-#3) + key rotation playbook.
-  - **JANGAN PERNAH** taruh di repo, dalam string resource, atau di SharedPreferences plain.
+#### S-5. API key Gemini ✅ DONE (PR1a infrastructure, akan dikonsumsi PR2)
+- ✅ MVP strategi: `local.properties` (gitignored) → `buildConfigField` di `:core:network` → `BuildConfig.GEMINI_API_KEY`
+- ✅ Helper `Project.readSecret(name)` di build-logic (local.properties → env fallback)
+- ✅ `GeminiConfig` data class + Hilt provider, ready di-inject saat Tania module dibangun
+- ✅ CI workflow inject `GEMINI_API_KEY` + `GEMINI_MODEL` dari GitHub Secrets via env var
+- ✅ `local.properties.example` + README setup section
+- ⏳ Backend proxy migration → Phase 4 saat backend SabiTani dibangun. Key rotation playbook akan ditulis saat key pertama dipakai produksi.
 
 ### 🟠 Penting (sebelum buka public beta)
 

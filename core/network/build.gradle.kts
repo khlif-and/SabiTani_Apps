@@ -1,3 +1,5 @@
+import tech.sabitani.convention.readSecret
+
 plugins {
     id("sabitani.android.library")
     id("sabitani.android.hilt")
@@ -5,6 +7,15 @@ plugins {
 
 android {
     namespace = "tech.sabitani.core.network"
+
+    buildFeatures {
+        buildConfig = true
+    }
+
+    defaultConfig {
+        buildConfigField("String", "GEMINI_API_KEY", "\"${readSecret("GEMINI_API_KEY")}\"")
+        buildConfigField("String", "GEMINI_MODEL", "\"${readSecret("GEMINI_MODEL")}\"")
+    }
 }
 
 dependencies {

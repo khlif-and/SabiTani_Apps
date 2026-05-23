@@ -1,0 +1,12 @@
+## Salin file ini menjadi local.properties di root project (sudah gitignored).
+## Isi nilai dari sumber resmi sebelum build pertama.
+
+# Path Android SDK lokal (otomatis di-generate Android Studio)
+sdk.dir=
+
+# Gemini API key — ambil dari https://aistudio.google.com/apikey
+GEMINI_API_KEY=
+
+# (Opsional) Override model Gemini default
+# Default: gemini-2.0-flash
+GEMINI_MODEL=
