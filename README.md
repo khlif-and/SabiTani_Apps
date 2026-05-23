@@ -6,6 +6,29 @@ Dokumen ini adalah *single source of truth* untuk arsitektur, struktur folder, d
 
 ---
 
+## Setup Lokal
+
+1. Salin `local.properties.example` → `local.properties` (sudah gitignored).
+2. Isi minimal:
+   - `sdk.dir` — auto-fill oleh Android Studio saat sync pertama.
+   - `GEMINI_API_KEY` — ambil dari [Google AI Studio](https://aistudio.google.com/apikey). Diperlukan saat fitur Tania (Phase 2) aktif. Build tetap sukses dengan key kosong, tapi call ke Gemini akan gagal.
+   - `GEMINI_MODEL` *(opsional)* — override default `gemini-2.0-flash`.
+3. Build: `./gradlew assembleDebug`.
+
+### Secrets di CI
+
+Tambahkan ke **GitHub repo settings → Secrets and variables → Actions**:
+
+| Secret | Wajib | Sumber |
+|---|---|---|
+| `GEMINI_API_KEY` | Saat Phase 2 aktif | Google AI Studio |
+| `GEMINI_MODEL` | Tidak | Kosongkan untuk pakai default |
+| `GOOGLE_SERVICES_JSON` | Saat PR1b (Firebase Auth) | Firebase console → Project settings |
+
+Workflow `.github/workflows/ci.yml` membaca secrets via env var → `Project.readSecret(name)` di `build-logic` resolve ke env saat di CI atau ke `local.properties` saat di lokal.
+
+---
+
 ## Daftar Isi
 
 1. [Filosofi Arsitektur](#1-filosofi-arsitektur)
